@@ -29,6 +29,16 @@
       if (email) {
         cmd += ' CLOUDFLARE_EMAIL="' + email + '"';
       }
+
+      var enableSub = document.getElementById('enableCustomSub');
+      if (enableSub && enableSub.checked) {
+        var subInput = document.getElementById('customSubdomain');
+        var sub = subInput ? subInput.value.trim() : '';
+        if (sub) {
+          cmd += ' CLOUDFLARE_SUBDOMAIN="' + sub + '"';
+        }
+      }
+
       cmd += ' python3 -';
 
       document.getElementById('commandText').innerText = cmd;
@@ -113,7 +123,19 @@
             </p>
           </div>
           <input type="password" id="cfToken" dir="ltr" placeholder="توکن ساخته شده را اینجا پیست کنید (مثلاً: vW8x_...)" class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
-          <input type="email" id="cfEmail" dir="ltr" placeholder="ایمیل اکانت کلودفلر (فقط اگر از Global API Key استفاده می‌کنید)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-300 transition outline-none mt-2">
+          <input type="email" id="cfEmail" dir="ltr" placeholder="ایمیل اکانت کلودفلر (اختیاری - فقط برای Global API Key)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-300 transition outline-none mt-2">
+
+          <!-- Optional Custom Subdomain Toggle -->
+          <div class="pt-2 border-t border-slate-800/60 mt-3">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="enableCustomSub" onchange="document.getElementById('subdomainBox').classList.toggle('hidden', !this.checked)" class="rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-0">
+              <span class="text-xs text-slate-400 font-medium">اتصال ساب‌دامنه اختصاصی (اختیاری - برای ایران)</span>
+            </label>
+            <div id="subdomainBox" class="hidden mt-2">
+              <input type="text" id="customSubdomain" dir="ltr" placeholder="مثال: ai.yourdomain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none">
+              <p class="text-[10px] text-slate-500 mt-1">در صورت خالی بودن، ورکر به صورت پیش‌فرض روی workers.dev اجرا و در ۹روتر تنظیم می‌شود.</p>
+            </div>
+          </div>
         </div>
       </div>
 

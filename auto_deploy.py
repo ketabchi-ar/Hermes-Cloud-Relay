@@ -124,43 +124,29 @@ def main():
     account_name = accounts[0]["name"]
     print(f"\033[0;32m✔ متصل به حساب: {account_name} ({account_id})\033[0m")
 
-    # 3. Get Zones (Domains) - Fully Automatic Selection
-    print("\n\033[0;34m2️⃣ در حال دریافت خودکار دامنه‌های متصل...\033[0m")
+    # 3. Custom Domain (Strictly Optional)
     custom_sub_env = os.environ.get("CLOUDFLARE_SUBDOMAIN", "").strip()
-
-    zones_res = cf_request(f"/zones?account.id={account_id}", token, email)
-    zones = zones_res.get("result", [])
-
     zone_id = None
-    domain_name = None
     target_subdomain = None
 
     if custom_sub_env:
-        # Match zone for custom subdomain
+        print("\n\033[0;34m2️⃣ در حال بررسی دامنه‌های متصل برای ساب‌دامنه سفارشی...\033[0m")
+        zones_res = cf_request(f"/zones?account.id={account_id}", token, email)
+        zones = zones_res.get("result", [])
         parts = custom_sub_env.split(".")
         if len(parts) >= 2:
             base_d = ".".join(parts[-2:])
             for z in zones:
                 if z["name"] == base_d:
                     zone_id = z["id"]
-                    domain_name = z["name"]
                     target_subdomain = custom_sub_env
                     break
         if not zone_id and zones:
             zone_id = zones[0]["id"]
-            domain_name = zones[0]["name"]
             target_subdomain = custom_sub_env
         print(f"\033[0;32m✔ ساب‌دامنه اختصاصی: {target_subdomain}\033[0m")
-    elif zones:
-        # Pick first active zone automatically
-        zone = zones[0]
-        zone_id = zone["id"]
-        domain_name = zone["name"]
-        target_subdomain = f"ai.{domain_name}"
-        print(f"\033[0;32m✔ دامنه فعال پیدا شد: {domain_name}\033[0m")
-        print(f"\033[0;32m✔ ساب‌دامنه خودکار ایجاد شد: {target_subdomain}\033[0m")
     else:
-        print("\033[1;33m⚠️ دامنه مستقلی در کلودفلر یافت نشد؛ از آدرس پیش‌فرض ورکر استفاده می‌شود.\033[0m")
+        print("\n\033[0;34m2️⃣ ساب‌دامنه اختیاری وارد نشده است؛ استفاده از آدرس پیش‌فرض کلودفلر (workers.dev)...\033[0m")
 
     # 4. Load or Fetch Worker Script
     script_name = "hermes-cloud-relay"
