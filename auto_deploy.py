@@ -61,23 +61,29 @@ def main():
 
     # 1. Get Token from env or input
     token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    email = os.environ.get("CLOUDFLARE_EMAIL", "").strip()
+
     if not token and len(sys.argv) > 1:
         token = sys.argv[1].strip()
 
     if not token:
-        print("\033[1;33m🔑 توکن دسترسی Cloudflare API Token خود را وارد کنید:\033[0m")
-        print("  (لینک دریافت: https://dash.cloudflare.com/profile/api-tokens با دسترسی Workers & DNS)")
-        token = input("API Token: ").strip()
+        print("\033[1;33m🔑 کلید یا توکن دسترسی Cloudflare خود را وارد کنید:\033[0m")
+        token = input("API Token / Global Key: ").strip()
 
     if not token:
         print("\033[0;31m❌ توکن وارد نشد. عملیات لغو شد.\033[0m")
         sys.exit(1)
 
+    # Detect Global API Key (37 chars hex)
+    if len(token) == 37 and not email:
+        print("\033[1;33m📧 کلید شما از نوع Global API Key است. لطفاً ایمیل حساب کلودفلر خود را وارد کنید:\033[0m")
+        email = input("Cloudflare Email: ").strip()
+
     # 2. Verify Token & Get Account
     print("\n\033[0;34m1️⃣ در حال بررسی دسترسی به حساب کلودفلر...\033[0m")
-    accounts_res = cf_request("/accounts", token)
+    accounts_res = cf_request("/accounts", token, email)
     if not accounts_res.get("success"):
-        print(f"\033[0;31m❌ توکن نامعتبر است: {accounts_res.get('errors')}\033[0m")
+        print(f"\033[0;31m❌ احراز هویت ناموفق بود: {accounts_res.get('errors')}\033[0m")
         sys.exit(1)
 
     accounts = accounts_res.get("result", [])
@@ -93,7 +99,7 @@ def main():
     print("\n\033[0;34m2️⃣ در حال دریافت خودکار دامنه‌های متصل...\033[0m")
     custom_sub_env = os.environ.get("CLOUDFLARE_SUBDOMAIN", "").strip()
 
-    zones_res = cf_request(f"/zones?account.id={account_id}", token)
+    zones_res = cf_request(f"/zones?account.id={account_id}", token, email)
     zones = zones_res.get("result", [])
 
     zone_id = None
@@ -140,6 +146,7 @@ def main():
     deploy_res = cf_request(
         f"/accounts/{account_id}/workers/scripts/{script_name}",
         token,
+        email,
         method="PUT",
         data=worker_code,
         content_type="application/javascript"
@@ -152,7 +159,7 @@ def main():
     print("\033[0;32m✔ ورکر با موفقیت ساخته و دیپلوی شد!\033[0m")
 
     # Enable workers.dev subdomain route as fallback
-    subdomain_res = cf_request(f"/accounts/{account_id}/workers/scripts/{script_name}/subdomain", token, method="POST", data={"enabled": True})
+    subdomain_res = cf_request(f"/accounts/{account_id}/workers/scripts/{script_name}/subdomain", token, email, method="POST", data={"enabled": True})
 
     # 5. Attach Custom Domain if available
     final_url = None
@@ -161,6 +168,7 @@ def main():
         attach_res = cf_request(
             f"/accounts/{account_id}/workers/domains",
             token,
+            email,
             method="PUT",
             data={
                 "zone_id": zone_id,
@@ -176,7 +184,7 @@ def main():
             print(f"\033[1;33m⚠️ نتوانست ساب‌دامنه را اتوماتیک اضافه کند ({attach_res.get('errors')}).\033[0m")
 
     if not final_url:
-        sub_info = cf_request(f"/accounts/{account_id}/workers/subdomain", token)
+        sub_info = cf_request(f"/accounts/{account_id}/workers/subdomain", token, email)
         user_sub = sub_info.get("result", {}).get("subdomain", "worker")
         final_url = f"https://{script_name}.{user_sub}.workers.dev"
 
