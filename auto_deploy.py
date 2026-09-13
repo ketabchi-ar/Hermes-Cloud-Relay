@@ -168,11 +168,15 @@ def main():
     if not os.path.exists(worker_file):
         worker_file = os.path.expanduser("~/Hermes-Cloud-Relay/src/index.js")
 
-    worker_code = None
+    worker_code = ""
     if os.path.exists(worker_file):
-        with open(worker_file, "r", encoding="utf-8") as f:
-            worker_code = f.read()
-    else:
+        try:
+            with open(worker_file, "r", encoding="utf-8") as f:
+                worker_code = f.read()
+        except:
+            pass
+
+    if not worker_code:
         print("\033[0;34m📥 در حال دریافت آخرین نسخه کدهای ورکر از گیت‌هاب...\033[0m")
         gh_worker_url = "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/src/index.js"
         with urllib.request.urlopen(gh_worker_url) as resp:
