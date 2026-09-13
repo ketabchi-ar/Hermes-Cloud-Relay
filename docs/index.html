@@ -122,30 +122,36 @@
 
   <script>
     function generateOneClickCommand() {
-      const token = document.getElementById('cfToken').value.trim();
-      const sub = document.getElementById('customSubdomain').value.trim();
+      var tokenInput = document.getElementById('cfToken');
+      var token = tokenInput ? tokenInput.value.trim() : '';
 
       if (!token) {
         alert('لطفاً توکن کلودفلر خود را وارد کنید.');
         return;
       }
 
-      let cmd = \`curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="\${token}" python3 -\`;
-      if (sub) {
-        cmd = \`CLOUDFLARE_SUBDOMAIN="\${sub}" \` + cmd;
-      }
+      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '" python3 -';
 
       document.getElementById('commandText').innerText = cmd;
       document.getElementById('outputContainer').classList.remove('hidden');
     }
 
     function copyCommand() {
-      const text = document.getElementById('commandText').innerText;
-      navigator.clipboard.writeText(text);
-      const btn = document.getElementById('copyBtn');
+      var text = document.getElementById('commandText').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      var btn = document.getElementById('copyBtn');
       btn.innerHTML = '<span>✔</span> کپی شد!';
-      setTimeout(() => {
-        btn.innerHTML = '<span>📋</span> کپی دستور';
+      setTimeout(function() {
+        btn.innerHTML = '<span>📋</span> کپی با یک کلیک';
       }, 2000);
     }
   </script>
