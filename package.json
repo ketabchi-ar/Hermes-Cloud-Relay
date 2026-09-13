@@ -1,0 +1,24 @@
+{
+  "name": "hermes-cloud-relay",
+  "version": "1.0.0",
+  "description": "Serverless AI Gateway & Reverse Proxy on Cloudflare Workers with Web UI, Multi-Account Key Rotation, and Quota Failover",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "ai-gateway",
+    "gemini",
+    "openai",
+    "claude",
+    "reverse-proxy",
+    "hermes-agent"
+  ],
+  "author": "Ardalan Ketabchi",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.131.0"
+  }
+}
