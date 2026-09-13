@@ -64,6 +64,7 @@ def cf_request(endpoint, token, email=None, method="GET", data=None, content_typ
                 body = data.encode("utf-8")
             else:
                 body = data
+            headers["Content-Length"] = str(len(body))
 
         req = urllib.request.Request(url, data=body, headers=headers, method=method)
         try:
@@ -171,7 +172,7 @@ def main():
     print(f"\n\033[0;34m3️⃣ در حال دیپلوی خودکار ورکر ({script_name}) در کلودفلر...\033[0m")
 
     # Cloudflare ES Modules require multipart/form-data with metadata
-    import uuid
+    import uuid, time
     boundary = "----CFWorkerBoundary" + uuid.uuid4().hex
     metadata = json.dumps({"main_module": "index.js"})
 
@@ -182,17 +183,27 @@ def main():
     ]
     multipart_body = "".join(parts).encode("utf-8")
 
-    deploy_res = cf_request(
-        f"/accounts/{account_id}/workers/scripts/{script_name}",
-        token,
-        email,
-        method="PUT",
-        data=multipart_body,
-        content_type=f"multipart/form-data; boundary={boundary}"
-    )
+    deploy_res = None
+    for attempt in range(1, 4):
+        deploy_res = cf_request(
+            f"/accounts/{account_id}/workers/scripts/{script_name}",
+            token,
+            email,
+            method="PUT",
+            data=multipart_body,
+            content_type=f"multipart/form-data; boundary={boundary}"
+        )
+        if deploy_res.get("success"):
+            break
+        err_msg = str(deploy_res.get("errors", ""))
+        if "upstream connect error" in err_msg or "connection termination" in err_msg or "reset" in err_msg:
+            print(f"\033[1;33m⏳ نوسان موقت شبکه کلودفلر؛ تلاش مجدد ({attempt}/3)...\033[0m")
+            time.sleep(1.5)
+        else:
+            break
 
-    if not deploy_res.get("success"):
-        print(f"\033[0;31m❌ خطا در دیپلوی ورکر: {deploy_res.get('errors')}\033[0m")
+    if not deploy_res or not deploy_res.get("success"):
+        print(f"\033[0;31m❌ خطا در دیپلوی ورکر: {deploy_res.get('errors') if deploy_res else 'ناشناخته'}\033[0m")
         sys.exit(1)
 
     print("\033[0;32m✔ ورکر با موفقیت ساخته و دیپلوی شد!\033[0m")
