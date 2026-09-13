@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>⚡ Hermes Cloud Relay | راه‌اندازی سریع ۱-کلیکی</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -10,6 +13,41 @@
     body { font-family: 'Vazirmatn', -apple-system, sans-serif; }
     [dir="ltr"] { direction: ltr; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   </style>
+  <script>
+    function generateOneClickCommand() {
+      var tokenInput = document.getElementById('cfToken');
+      var token = tokenInput ? tokenInput.value.trim() : '';
+
+      if (!token) {
+        alert('لطفاً توکن کلودفلر خود را وارد کنید.');
+        return;
+      }
+
+      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '" python3 -';
+
+      document.getElementById('commandText').innerText = cmd;
+      document.getElementById('outputContainer').classList.remove('hidden');
+    }
+
+    function copyCommand() {
+      var text = document.getElementById('commandText').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      var btn = document.getElementById('copyBtn');
+      btn.innerHTML = '<span>✔</span> کپی شد!';
+      setTimeout(function() {
+        btn.innerHTML = '<span>📋</span> کپی با یک کلیک';
+      }, 2000);
+    }
+  </script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-amber-500 selection:text-black">
 
@@ -120,40 +158,5 @@
 
   </div>
 
-  <script>
-    function generateOneClickCommand() {
-      var tokenInput = document.getElementById('cfToken');
-      var token = tokenInput ? tokenInput.value.trim() : '';
-
-      if (!token) {
-        alert('لطفاً توکن کلودفلر خود را وارد کنید.');
-        return;
-      }
-
-      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '" python3 -';
-
-      document.getElementById('commandText').innerText = cmd;
-      document.getElementById('outputContainer').classList.remove('hidden');
-    }
-
-    function copyCommand() {
-      var text = document.getElementById('commandText').innerText;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text);
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-      var btn = document.getElementById('copyBtn');
-      btn.innerHTML = '<span>✔</span> کپی شد!';
-      setTimeout(function() {
-        btn.innerHTML = '<span>📋</span> کپی با یک کلیک';
-      }, 2000);
-    }
-  </script>
 </body>
 </html>
