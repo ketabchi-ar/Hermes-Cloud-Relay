@@ -183,13 +183,26 @@ def main():
             worker_code = resp.read().decode("utf-8")
 
     print(f"\n\033[0;34m3️⃣ در حال دیپلوی خودکار ورکر ({script_name}) در کلودفلر...\033[0m")
+
+    # Cloudflare ES Modules require multipart/form-data with metadata
+    import uuid
+    boundary = "----CFWorkerBoundary" + uuid.uuid4().hex
+    metadata = json.dumps({"main_module": "index.js"})
+
+    parts = [
+        f"--{boundary}\r\nContent-Disposition: form-data; name=\"metadata\"\r\nContent-Type: application/json\r\n\r\n{metadata}\r\n",
+        f"--{boundary}\r\nContent-Disposition: form-data; name=\"index.js\"; filename=\"index.js\"\r\nContent-Type: application/javascript+module\r\n\r\n{worker_code}\r\n",
+        f"--{boundary}--\r\n"
+    ]
+    multipart_body = "".join(parts).encode("utf-8")
+
     deploy_res = cf_request(
         f"/accounts/{account_id}/workers/scripts/{script_name}",
         token,
         email,
         method="PUT",
-        data=worker_code,
-        content_type="application/javascript"
+        data=multipart_body,
+        content_type=f"multipart/form-data; boundary={boundary}"
     )
 
     if not deploy_res.get("success"):
