@@ -259,20 +259,47 @@ def main():
         user_sub = sub_info.get("result", {}).get("subdomain", "worker")
         final_url = f"https://{script_name}.{user_sub}.workers.dev"
 
-    # 6. Bind to 9Router SQLite Database
-    print(f"\n\033[0;34m5️⃣ در حال درج خودکار آدرس رله در پایگاه‌داده 9Router...\033[0m")
+    # 6. Bind to 9Router SQLite Database (Insert or Update without deleting existing pools)
+    print(f"\n\033[0;34m5️⃣ در حال ثبت هوشمند آدرس رله در پایگاه‌داده 9Router...\033[0m")
     db_path = os.path.expanduser("~/.9router/db/data.sqlite")
     if os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
-        cur.execute("""
-            UPDATE proxyPools 
-            SET data = json_set(data, '$.proxyUrl', ?) 
-            WHERE type = 'cloudflare' OR json_extract(data, '$.name') = 'cloudflare-relay';
-        """, (final_url,))
+        
+        # Check if hermes-cloud-relay already exists in proxyPools
+        cur.execute("SELECT id, data FROM proxyPools WHERE json_extract(data, '$.name') = 'hermes-cloud-relay';")
+        row = cur.fetchone()
+        
+        if row:
+            # Update only existing hermes-cloud-relay
+            cur.execute("""
+                UPDATE proxyPools 
+                SET data = json_set(data, '$.proxyUrl', ?) 
+                WHERE id = ?;
+            """, (final_url, row[0]))
+            print("\033[0;32m✔ آدرس رله قبلی با آدرس جدید به‌روزرسانی شد.\033[0m")
+        else:
+            # Insert as a new independent proxy pool entry
+            import uuid, datetime
+            new_id = str(uuid.uuid4())
+            now_iso = datetime.datetime.utcnow().isoformat() + "Z"
+            pool_data = json.dumps({
+                "name": "hermes-cloud-relay",
+                "proxyUrl": final_url,
+                "noProxy": "",
+                "type": "cloudflare",
+                "strictProxy": False,
+                "lastTestedAt": None,
+                "lastError": None
+            })
+            cur.execute("""
+                INSERT INTO proxyPools (id, isActive, testStatus, data, createdAt, updatedAt)
+                VALUES (?, 1, 'active', ?, ?, ?);
+            """, (new_id, pool_data, now_iso, now_iso))
+            print("\033[0;32m✔ رله جدید به لیست Proxy Pools اضافه شد (بدون حذف سایر پروکسی‌ها).\033[0m")
+
         conn.commit()
         conn.close()
-        print("\033[0;32m✔ آدرس رله مستقیماً در 9Router ذخیره شد.\033[0m")
 
         # Restart 9Router
         print("\033[0;34m6️⃣ در حال بازنشانی سرویس 9Router...\033[0m")
