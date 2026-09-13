@@ -570,6 +570,33 @@ export default {
       return jsonResponse({ status: "ok", service: "Hermes-Cloud-Relay" });
     }
 
+    // Dynamic 1-Click Setup script for 9Router & Hermes clients
+    if (url.pathname === "/setup" || url.pathname === "/setup.sh") {
+      const origin = url.origin;
+      const setupScript = `#!/usr/bin/env bash
+set -e
+GREEN='\\033[0;32m'
+CYAN='\\033[0;36m'
+NC='\\033[0m'
+echo -e "\${CYAN}====================================================\${NC}"
+echo -e "\${CYAN}⚡ پیکربندی خودکار ۱-کلیکی 9Router با رله اختصاصی کلودفلر\${NC}"
+echo -e "\${CYAN}====================================================\${NC}"
+
+DB_PATH="$HOME/.9router/db/data.sqlite"
+if [ -f "$DB_PATH" ]; then
+  sqlite3 "$DB_PATH" "UPDATE proxyPools SET config = json_set(config, '$.proxyUrl', '${origin}') WHERE type = 'cloudflare' OR json_extract(config, '$.name') = 'cloudflare-relay';"
+  echo -e "\${GREEN}✔ آدرس رله با موفقیت در 9Router ذخیره شد: ${origin}\${NC}"
+  launchctl kickstart -k "gui/$(id -u)/com.ardalan.9router" 2>/dev/null || true
+  echo -e "\${GREEN}🎉 سرویس 9Router بازنشانی شد. بدون نیاز به فیلترشکن آماده است!\${NC}"
+else
+  echo "9Router دیتابیس در سیستم یافت نشد، اما آدرس رله شما آماده است: ${origin}"
+fi
+`;
+      return new Response(setupScript, {
+        headers: { "Content-Type": "text/x-shellscript; charset=utf-8" },
+      });
+    }
+
     // Load dynamic configuration
     const config = await getConfig(env);
 
