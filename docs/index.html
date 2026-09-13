@@ -14,18 +14,56 @@
     [dir="ltr"] { direction: ltr; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   </style>
   <script>
-    function generateOneClickCommand() {
-      var tokenInput = document.getElementById('cfToken');
-      var token = tokenInput ? tokenInput.value.trim() : '';
+    var currentMethod = 'global';
 
-      if (!token) {
-        alert('لطفاً توکن کلودفلر خود را وارد کنید.');
-        return;
+    function setAuthMethod(method) {
+      currentMethod = method;
+      var tabG = document.getElementById('tabGlobal');
+      var tabT = document.getElementById('tabToken');
+      var secG = document.getElementById('sectionGlobal');
+      var secT = document.getElementById('sectionToken');
+
+      if (method === 'global') {
+        tabG.className = 'pb-2.5 border-b-2 border-amber-500 text-amber-400 transition';
+        tabT.className = 'pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition';
+        secG.classList.remove('hidden');
+        secT.classList.add('hidden');
+      } else {
+        tabT.className = 'pb-2.5 border-b-2 border-amber-500 text-amber-400 transition';
+        tabG.className = 'pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition';
+        secT.classList.remove('hidden');
+        secG.classList.add('hidden');
+      }
+    }
+
+    function generateOneClickCommand() {
+      var token = '';
+      var email = '';
+
+      if (currentMethod === 'global') {
+        var keyInput = document.getElementById('cfGlobalKey');
+        token = keyInput ? keyInput.value.trim() : '';
+        var emailInput = document.getElementById('cfEmail');
+        email = emailInput ? emailInput.value.trim() : '';
+
+        if (!token) {
+          alert('لطفاً کلید Global API Key را وارد کنید.');
+          return;
+        }
+        if (!email) {
+          alert('برای کلید گلوبال، لطفاً ایمیل اکانت کلودفلر خود را نیز وارد کنید.');
+          return;
+        }
+      } else {
+        var tokenInput = document.getElementById('cfToken');
+        token = tokenInput ? tokenInput.value.trim() : '';
+        if (!token) {
+          alert('لطفاً توکن ساخته شده کلودفلر را وارد کنید.');
+          return;
+        }
       }
 
       var cmd = 'curl -fsSL "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py?ts=' + Date.now() + '" | CLOUDFLARE_API_TOKEN="' + token + '"';
-      var emailInput = document.getElementById('cfEmail');
-      var email = emailInput ? emailInput.value.trim() : '';
       if (email) {
         cmd += ' CLOUDFLARE_EMAIL="' + email + '"';
       }
@@ -99,19 +137,48 @@
       
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
-          <h2 class="text-lg font-bold text-white">راه‌اندازی کاملاً خودکار (فقط یک پیست!)</h2>
-          <p class="text-xs text-slate-400">تمام گزینه‌ها به صورت خودکار توسط سیستم شناسایی و تنظیم می‌شوند</p>
+          <h2 class="text-lg font-bold text-white">ویزارد راه‌اندازی ۱-کلیکی</h2>
+          <p class="text-xs text-slate-400">روش احراز هویت با کلودفلر را انتخاب کنید:</p>
         </div>
-        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold">بدون تنظیمات دستی</span>
+        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold">بدون نیاز به ریستارت</span>
       </div>
 
-      <div class="space-y-4">
-        <!-- Step 1: Cloudflare Token with 1-click pre-filled template -->
+      <!-- Auth Method Tabs -->
+      <div class="flex border-b border-slate-800 gap-4 text-xs sm:text-sm font-bold">
+        <button onclick="setAuthMethod('global')" id="tabGlobal" class="pb-2.5 border-b-2 border-amber-500 text-amber-400 transition">
+          روش ۱: کلید گلوبال (Global API Key) - فوق‌العاده ساده ⭐
+        </button>
+        <button onclick="setAuthMethod('token')" id="tabToken" class="pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+          روش ۲: توکن اختصاصی (API Token)
+        </button>
+      </div>
+
+      <!-- Method 1: Global API Key (Zero Forms) -->
+      <div id="sectionGlobal" class="space-y-4">
+        <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 text-xs text-slate-300 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-300">ساده‌ترین راه بدون پر کردن هیچ فرمی:</span>
+            <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-xl transition">
+              مشاهده Global API Key در کلودفلر ↗
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-400">
+            کافی است وارد لینک بالا شوید، در پایین صفحه روبروی عبارت <strong>Global API Key</strong> دکمه <strong>View</strong> را بزنید، پسورد اکانت را وارد کرده و کلید را کپی و اینجا پیست کنید:
+          </p>
+        </div>
+        <div class="space-y-2">
+          <input type="password" id="cfGlobalKey" dir="ltr" placeholder="کلید Global API Key را اینجا پیست کنید..." class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
+          <input type="email" id="cfEmail" dir="ltr" placeholder="ایمیل اکانت کلودفلر شما (مثلاً: your@gmail.com)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-200 transition outline-none">
+        </div>
+      </div>
+
+      <!-- Method 2: API Token with Step 3 & 4 Guide -->
+      <div id="sectionToken" class="hidden space-y-4">
         <div class="space-y-2">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <label class="text-xs font-bold text-slate-200">کلید دسترسی Cloudflare API Token:</label>
+            <label class="text-xs font-bold text-slate-200">دریافت و ساخت توکن اختصاصی کلودفلر:</label>
             <a href="https://dash.cloudflare.com/profile/api-tokens?template=edit_cloudflare_workers" target="_blank" class="inline-flex items-center gap-1.5 text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-xl transition font-bold">
-              <span>🔗</span> کلیک کنید: صفحه آماده با تنظیمات از پیش پرشده کلودفلر ↗
+              <span>🔗</span> ورود به صفحه ساخت توکن کلودفلر ↗
             </a>
           </div>
           <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-3.5 text-xs text-slate-300 space-y-2">
@@ -124,29 +191,36 @@
               <span>در لیست تمپلیت‌ها، روبروی ردیف چهارم <strong>Edit Cloudflare Workers</strong> دکمه آبی <strong>Use template</strong> را بزنید.</span>
             </p>
             <p class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-[10px]">۳</span>
-              <span>در انتهای صفحه باز شده، دکمه آبی <strong>Continue to summary</strong> و سپس <strong>Create Token</strong> را بزنید و توکن را کپی کنید.</span>
+              <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 font-bold flex items-center justify-center text-[10px]">۳</span>
+              <span>در بخش <strong>Account Resources</strong> کادر قرمز را باز کرده و <strong>نام اکانت خودتان</strong> را انتخاب کنید.</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 font-bold flex items-center justify-center text-[10px]">۴</span>
+              <span>در بخش <strong>Zone Resources</strong> کادر دوم را از Specific zone به <strong>All zones</strong> تغییر دهید.</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-[10px]">۵</span>
+              <span>پایین صفحه دکمه آبی <strong>Continue to summary</strong> و سپس <strong>Create Token</strong> را بزنید و توکن را کپی کنید.</span>
             </p>
           </div>
           <input type="password" id="cfToken" dir="ltr" placeholder="توکن ساخته شده را اینجا پیست کنید (مثلاً: vW8x_...)" class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
-          <input type="email" id="cfEmail" dir="ltr" placeholder="ایمیل اکانت کلودفلر (اختیاری - فقط برای Global API Key)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-300 transition outline-none mt-2">
+        </div>
+      </div>
 
-          <!-- Optional Settings Toggle -->
-          <div class="pt-2 border-t border-slate-800/60 mt-3 space-y-2">
-            <label class="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" id="enableAdvanced" onchange="document.getElementById('advancedBox').classList.toggle('hidden', !this.checked)" class="rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-0">
-              <span class="text-xs text-slate-400 font-medium">تنظیمات پیشرفته (اختیاری: تغییر نام ورکر یا ساب‌دامنه)</span>
-            </label>
-            <div id="advancedBox" class="hidden space-y-2 pt-1">
-              <div>
-                <label class="text-[11px] text-slate-400 block mb-1">نام ورکر در کلودفلر (پیش‌فرض: hermes-cloud-relay):</label>
-                <input type="text" id="workerName" dir="ltr" placeholder="مثلاً: hermes-relay-2" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none">
-              </div>
-              <div>
-                <label class="text-[11px] text-slate-400 block mb-1">ساب‌دامنه اختصاصی (برای دسترسی بدون فیلترشکن در ایران):</label>
-                <input type="text" id="customSubdomain" dir="ltr" placeholder="مثال: ai.yourdomain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none">
-              </div>
-            </div>
+      <!-- Common Optional Advanced Settings -->
+      <div class="pt-2 border-t border-slate-800/60 space-y-2">
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" id="enableAdvanced" onchange="document.getElementById('advancedBox').classList.toggle('hidden', !this.checked)" class="rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-0">
+          <span class="text-xs text-slate-400 font-medium">تنظیمات پیشرفته (اختیاری: تغییر نام ورکر یا ساب‌دامنه)</span>
+        </label>
+        <div id="advancedBox" class="hidden space-y-2 pt-1">
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">نام ورکر در کلودفلر (پیش‌فرض: hermes-cloud-relay):</label>
+            <input type="text" id="workerName" dir="ltr" placeholder="مثلاً: hermes-relay-2" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">ساب‌دامنه اختصاصی (برای دسترسی بدون فیلترشکن در ایران):</label>
+            <input type="text" id="customSubdomain" dir="ltr" placeholder="مثال: ai.yourdomain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none">
           </div>
         </div>
       </div>
