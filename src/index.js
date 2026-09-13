@@ -565,6 +565,50 @@ export default {
       return new Response(null, { headers: corsHeaders() });
     }
 
+    // 0. Native 9Router Relay Protocol (Highest Priority & Ultra-Fast Stream)
+    const relayTarget = request.headers.get("x-relay-target");
+    if (relayTarget) {
+      const relayPath = request.headers.get("x-relay-path") || "";
+      const targetUrl = relayTarget.replace(/\/$/, "") + (relayPath.startsWith("/") ? relayPath : `/${relayPath}`);
+
+      const newHeaders = new Headers(request.headers);
+      newHeaders.delete("x-relay-target");
+      newHeaders.delete("x-relay-path");
+      newHeaders.delete("host");
+      newHeaders.delete("cf-connecting-ip");
+      newHeaders.delete("cf-ipcountry");
+      newHeaders.delete("cf-ray");
+
+      const init = {
+        method: request.method,
+        headers: newHeaders,
+        redirect: "follow",
+      };
+
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        init.body = request.body;
+        init.duplex = "half";
+      }
+
+      try {
+        const response = await fetch(targetUrl, init);
+        config.stats.totalRequests = (config.stats.totalRequests || 0) + 1;
+        config.stats.successfulRequests = (config.stats.successfulRequests || 0) + 1;
+        ctx.waitUntil(saveConfig(env, config));
+        return new Response(response.body, {
+          status: response.status,
+          headers: response.headers,
+        });
+      } catch (error) {
+        config.stats.failedRequests = (config.stats.failedRequests || 0) + 1;
+        ctx.waitUntil(saveConfig(env, config));
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 502,
+          headers: { "content-type": "application/json" },
+        });
+      }
+    }
+
     // Health check
     if (url.pathname === "/health" || url.pathname === "/ping") {
       return jsonResponse({ status: "ok", service: "Hermes-Cloud-Relay" });

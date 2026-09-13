@@ -150,7 +150,7 @@ def main():
         print("\n\033[0;34m2️⃣ ساب‌دامنه اختیاری وارد نشده است؛ استفاده از آدرس پیش‌فرض کلودفلر (workers.dev)...\033[0m")
 
     # 4. Load or Fetch Worker Script
-    script_name = "hermes-cloud-relay"
+    script_name = os.environ.get("WORKER_NAME", "hermes-cloud-relay").strip()
     worker_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "index.js")
     if not os.path.exists(worker_file):
         worker_file = os.path.expanduser("~/Hermes-Cloud-Relay/src/index.js")
