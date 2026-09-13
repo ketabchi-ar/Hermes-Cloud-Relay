@@ -266,7 +266,13 @@
         document.getElementById('webSuccessCard').classList.remove('hidden');
 
       } catch (err) {
-        appendLog('❌ ' + err.message, 'text-rose-400 font-bold');
+        var msg = (err && err.message) ? err.message : String(err);
+        if (msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('NetworkError') !== -1) {
+          appendLog('❌ خطای محدودیت امنیتی مرورگر (CORS): مرورگر شما به دلایل امنیتی اجازه ارسال مستقیم توکن به API کلودفلر از این صفحه را نمی‌دهد.', 'text-rose-400 font-bold');
+          appendLog('💡 راهکار ۱۰۰٪ تضمینی: لطفاً روی دکمه نارنجی بالا «استقرار رسمی با Deploy to Cloudflare» کلیک کنید یا از «روش ۱ (دستور خودکار در ترمینال)» استفاده نمایید.', 'text-amber-300 font-bold');
+        } else {
+          appendLog('❌ ' + msg, 'text-rose-400 font-bold');
+        }
       }
     }
   </script>
@@ -313,7 +319,7 @@
         <span>💻</span> روش ۱: راه‌اندازی سریع با دستور (اتصال خودکار)
       </button>
       <button onclick="switchMainMethod('method-web')" id="nav-method-web" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
-        <span>🌐</span> روش ۲: ویزارد وب ۱۰۰٪ آنلاین (BPB Style)
+        <span>🌐</span> روش ۲: ویزارد وب ۱۰۰٪ آنلاین (استقرار مستقیم از مرورگر)
       </button>
       <button onclick="switchMainMethod('method-manual')" id="nav-method-manual" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
         <span>🛠️</span> روش ۳: کپی دستی کد در کلودفلر
@@ -436,31 +442,63 @@
         <p class="text-xs text-slate-300 bg-slate-950/80 border border-slate-800 p-3.5 rounded-xl leading-relaxed">
           ⚡ <strong>تنها کار باقی‌مانده:</strong> دکمه سبز «کپی با یک کلیک» را بزنید، ترمینال سیستم خود را باز کرده، Paste کنید و اینتر بزنید. ظرف چند ثانیه ورکر در کلودفلر ساخته شده و ۹روتر شما خودکار متصل و ریستارت می‌شود!
         </p>
+
+        <!-- Step-by-Step 9Router Verification Guide -->
+        <div class="bg-slate-950/90 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3 text-xs text-slate-300">
+          <div class="flex items-center gap-2 text-amber-400 font-bold border-b border-slate-800 pb-2">
+            <span>📋</span> آموزش تست و راستی‌آزمایی در ۹روتر (کمتر از ۳۰ ثانیه):
+          </div>
+          <div class="space-y-2.5 leading-relaxed">
+            <p><span class="font-bold text-amber-400">۱.</span> در مرورگر خود صفحه تنظیمات پروکسی ۹روتر را باز کنید: <a href="http://127.0.0.1:20128/dashboard/proxy-pools" target="_blank" class="text-amber-300 font-mono underline font-bold">127.0.0.1:20128/dashboard/proxy-pools</a></p>
+            <p><span class="font-bold text-amber-400">۲.</span> بررسی کنید که رله جدید (<code class="text-emerald-400 font-mono font-bold">hermes-cloud-relay</code>) در لیست اضافه شده باشد و وضعیت آن فعال (سبز) باشد.</p>
+            <p><span class="font-bold text-amber-400">۳.</span> روی دکمه شبیه <strong class="text-white">لوله آزمایشگاه 🧪</strong> (با آیکون <code class="text-amber-300 font-mono text-[11px]">material-symbols-outlined text-[18px]</code>) کلیک کنید و مطمئن شوید پیام سبز <strong class="text-emerald-400 font-mono">Proxy test passed</strong> نمایش داده می‌شود.</p>
+            <p><span class="font-bold text-amber-400">۴.</span> از منوی سمت چپ وارد بخش <strong class="text-white">Providers</strong> شوید.</p>
+            <p><span class="font-bold text-amber-400">۵.</span> هر سرویسی که دچار تحریم و فیلتر است (مثلاً <strong class="text-amber-300 font-bold">Antigravity</strong> یا <strong class="text-amber-300 font-bold">Google Gemini</strong>) را انتخاب کنید.</p>
+            <p><span class="font-bold text-amber-400">۶.</span> در صفحه باز شده روی دکمه <strong class="text-white">Proxy</strong> بزنید و مطمئن شوید با همین رله جدید سینک است، سپس دکمه <strong class="text-emerald-400 font-bold">Test Connection One-by-One</strong> را بزنید.</p>
+            <p class="pt-1 text-emerald-400 font-bold flex items-center gap-1.5">
+              <span>🎉</span> تمام! حالا بدون هیچ نیازی به VPN، تمام اتصالات هوش مصنوعی شما با نهایت سرعت برقرار است.
+            </p>
+          </div>
+        </div>
       </div>
 
     </div>
 
-    <!-- SECTION 2: 100% In-Browser Web Wizard (BPB Style) -->
+    <!-- SECTION 2: 100% In-Browser Web Wizard -->
     <div id="sec-method-web" class="hidden bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
           <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <span>🌐</span> روش ۲: ویزارد وب ۱۰۰٪ آنلاین (مشابه BPB Wizard)
+            <span>🌐</span> روش ۲: ویزارد وب ۱۰۰٪ آنلاین (استقرار مستقیم از مرورگر)
           </h2>
-          <p class="text-xs text-slate-400">بدون نیاز به باز کردن ترمینال؛ ورکر مستقیماً از داخل مرورگر شما در کلودفلر دیپلوی می‌شود!</p>
+          <p class="text-xs text-slate-400">بدون نیاز به باز کردن ترمینال؛ ورکر مستقیماً در اکانت کلودفلر شما ایجاد می‌شود:</p>
         </div>
         <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full font-mono font-bold">بدون نیاز به ترمینال</span>
       </div>
 
+      <!-- One-Click Official Cloudflare Deploy Banner -->
+      <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-amber-300">استقرار فوق‌العاده سریع با ابزار رسمی کلودفلر:</span>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-mono font-bold">۱۰۰٪ تضمینی</span>
+        </div>
+        <a href="https://deploy.workers.cloudflare.com/?url=https://github.com/ketabchi-ar/Hermes-Cloud-Relay" target="_blank" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-slate-950 font-black text-xs sm:text-sm shadow-lg transition flex items-center justify-center gap-2">
+          <span>⚡</span> کلیک کنید: دیپلوی مستقیم در کلودفلر (Deploy to Cloudflare) ↗
+        </a>
+        <p class="text-[11px] text-slate-400">
+          با کلیک روی دکمه بالا، کلودفلر در یک تب جداگانه باز شده و ورکر را با ۱ کلیک در اکانت شما می‌سازد (بدون نیاز به توکن).
+        </p>
+      </div>
+
       <div class="space-y-4">
         <div class="space-y-2">
-          <label class="text-xs font-bold text-slate-200">کلید Global API Key یا توکن کلودفلر:</label>
-          <input type="password" id="webToken" dir="ltr" placeholder="کلید را اینجا پیست کنید..." class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
+          <label class="text-xs font-bold text-slate-200">یا ساخت مستقیم از همین صفحه با کلید کلودفلر:</label>
+          <input type="password" id="webToken" dir="ltr" placeholder="کلید Global API Key یا توکن را اینجا پیست کنید..." class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="text-xs text-slate-400 block mb-1">ایمیل اکانت کلودفلر (اختیاری - فقط برای Global API Key):</label>
+            <label class="text-xs text-slate-400 block mb-1">ایمیل اکانت کلودفلر (فقط برای Global API Key):</label>
             <input type="email" id="webEmail" dir="ltr" placeholder="your@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-200 transition outline-none">
           </div>
           <div>
@@ -472,8 +510,8 @@
           </div>
         </div>
 
-        <button onclick="startWebDeploy()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
-          <span>🚀</span> ساخت و استقرار مستقیم ورکر در کلودفلر
+        <button onclick="startWebDeploy()" class="w-full bg-slate-900 border border-amber-500/50 hover:bg-slate-800 text-amber-300 font-black py-3 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2">
+          <span>🚀</span> ارسال مستقیم درخواست ساخت ورکر
         </button>
 
         <!-- Live Web Log & Status -->
@@ -491,9 +529,6 @@
             <p class="text-xs text-slate-400">آدرس رله کلودفلر اختصاصی شما:</p>
             <div id="webResultUrl" dir="ltr" class="text-xs text-amber-300 font-mono font-bold select-all bg-slate-950 p-2.5 rounded-xl border border-slate-800 mt-1"></div>
           </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            💡 <strong>اتصال به ۹روتر:</strong> در داشبورد ۹روتر به بخش <strong>Proxy Pools</strong> بروید، روی Add کلیک کنید و آدرس بالا را پیست کنید (یا دستور سریع ترمینال در روش ۱ را یک‌بار اجرا کنید تا خودکار درج شود).
-          </p>
         </div>
 
       </div>
