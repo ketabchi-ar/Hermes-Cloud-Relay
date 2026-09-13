@@ -402,6 +402,42 @@ function renderAdminDashboard() {
       const keys = p.keys || [];
       const now = Date.now();
 
+      // Help Guides per provider
+      const guides = {
+        gemini: {
+          title: "راهنمای دریافت رایگان کلید Google Gemini",
+          link: "https://aistudio.google.com/app/apikey",
+          btnText: "ورود به Google AI Studio و دریافت API Key",
+          steps: [
+            "روی دکمه زیر کلیک کنید و با جیمیل خود وارد Google AI Studio شوید.",
+            "روی دکمه آبی Create API Key کلیک کنید.",
+            "کلید ساخته شده را کپی کرده و در کادر زیر پیست کنید.",
+            "نکته طلایی: گوگل به هر اکانت جیمیل روزانه ۱۵۰۰ درخواست رایگان می‌دهد! می‌توانید چند اکانت مختلف اضافه کنید تا هیچ‌وقت به سقف نخورید."
+          ]
+        },
+        openai: {
+          title: "راهنمای دریافت کلید OpenAI / ChatGPT",
+          link: "https://platform.openai.com/api-keys",
+          btnText: "ورود به داشبورد OpenAI API Keys",
+          steps: [
+            "وارد پنل توسعه‌دهندگان OpenAI شوید.",
+            "روی Create new secret key کلیک کرده و نام دلخواه بگذارید.",
+            "کلید sk-... را کپی و در کادر زیر وارد نمایید."
+          ]
+        },
+        claude: {
+          title: "راهنمای دریافت کلید Anthropic Claude",
+          link: "https://console.anthropic.com/settings/keys",
+          btnText: "ورود به کنسول Anthropic",
+          steps: [
+            "وارد کنسول Anthropic شوید.",
+            "در بخش API Keys روی Create Key بزنید و کلید را کپی نمایید."
+          ]
+        }
+      };
+
+      const g = guides[activeTab] || null;
+
       container.innerHTML = \`
         <div class="space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -411,6 +447,23 @@ function renderAdminDashboard() {
             </div>
             <div class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 font-mono">تعداد اکانت‌های فعال: \${keys.length}</div>
           </div>
+
+          \${g ? \`
+            <!-- Provider Guide Card -->
+            <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                  <span>💡</span> \${g.title}
+                </h4>
+                <a href="\${g.link}" target="_blank" class="text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+                  \${g.btnText} ↗
+                </a>
+              </div>
+              <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                \${g.steps.map(s => \`<li>\${s}</li>\`).join('')}
+              </ul>
+            </div>
+          \` : ''}
 
           <!-- Add Key Box -->
           <div class="bg-slate-950/60 border border-slate-800/80 p-4 rounded-xl space-y-3">
