@@ -1,7 +1,9 @@
 # ⚡ Hermes-Cloud-Relay
 
+[![DevSponsors](https://img.shields.io/badge/DevSponsors-Verified_OSS-6366f1?style=for-the-badge&logo=github)](https://devsponsors.github.io)
+[![Sponsor](https://img.shields.io/badge/Sponsor-DevSponsors_Hub-emerald?style=for-the-badge&logo=github-sponsors)](https://devsponsors.github.io)
+[![GitHub stars](https://img.shields.io/github/stars/ketabchi-ar/Hermes-Cloud-Relay?style=for-the-badge&logo=github&color=amber)](https://github.com/ketabchi-ar/Hermes-Cloud-Relay/stargazers)
 [![Deploy with 1-Click Wizard](https://img.shields.io/badge/🌐%20Web%20Wizard-1--Click%20Deploy-amber?style=for-the-badge)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-emerald?style=flat-square)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **درگاه سرورلس و رله ابری هوشمند روی Cloudflare Workers ویژه اتصال مستقیم، پرسرعت و بدون نیاز به فیلترشکن ۹روتر به مدل‌های هوش مصنوعی (Google Gemini, Antigravity, Claude, OpenAI)**
@@ -49,6 +51,15 @@
 1. وارد داشبورد کلودفلر شوید > **Workers & Pages** > **Create Worker**.
 2. کدهای رسمی موجود در فایل [`src/index.js`](src/index.js) را کپی کرده و در ادیتور کلودفلر پیست نمایید و دکمه **Save and deploy** را بزنید.
 3. آدرس ورکر ساخته‌شده را کپی کرده و در بخش **Proxy Pools** نرم‌افزار ۹روتر قرار دهید.
+
+---
+
+## 🌟 حمایت و اسپانسرشیپ (DevSponsors)
+
+اگر این پروژه برای اتصال بدون فیلترشکن ۹روتر شما مفید بوده است، با دادن **ستاره (Star)** در بالای صفحه گیت‌هاب از ما حمایت کنید.
+
+[![DevSponsors](https://img.shields.io/badge/DevSponsors-Verified_OSS-6366f1?style=for-the-badge&logo=github)](https://devsponsors.github.io)
+[![Sponsor](https://img.shields.io/badge/Sponsor-DevSponsors_Hub-emerald?style=for-the-badge&logo=github-sponsors)](https://devsponsors.github.io)
 
 ---
 
