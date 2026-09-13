@@ -312,26 +312,37 @@ def main():
         conn.commit()
         conn.close()
 
-        # Restart 9Router cleanly (Generic for all users & platforms)
-        print("\033[0;34m6️⃣ در حال بازنشانی سرویس 9Router جهت بارگذاری تنظیمات جدید...\033[0m")
+        # Restart 9Router cleanly (Cross-Platform for macOS, Linux, and Windows)
+        import platform
+        os_name = platform.system()
+        print(f"\033[0;34m6️⃣ در حال بازنشانی سرویس 9Router در سیستم‌عامل ({os_name})...\033[0m")
         
-        # Kill running 9router process safely so it re-reads SQLite on next launch/keepalive
-        subprocess.run(["pkill", "-f", "9router"], capture_output=True)
-        
-        # If running via macOS LaunchAgent, kickstart generically if found
-        uid = os.getuid()
-        try:
-            agents_out = subprocess.check_output(["launchctl", "list"], text=True)
-            for line in agents_out.splitlines():
-                if "9router" in line:
-                    agent_label = line.split()[-1]
-                    subprocess.run(["launchctl", "kickstart", "-k", f"gui/{uid}/{agent_label}"], capture_output=True)
-        except:
-            pass
+        if os_name == "Darwin":
+            # macOS
+            subprocess.run(["pkill", "-f", "9router"], capture_output=True)
+            uid = os.getuid()
+            try:
+                agents_out = subprocess.check_output(["launchctl", "list"], text=True)
+                for line in agents_out.splitlines():
+                    if "9router" in line:
+                        agent_label = line.split()[-1]
+                        subprocess.run(["launchctl", "kickstart", "-k", f"gui/{uid}/{agent_label}"], capture_output=True)
+            except:
+                pass
+            subprocess.run(["dscacheutil", "-flushcache"], capture_output=True)
+            subprocess.run(["killall", "-HUP", "mDNSResponder"], capture_output=True)
 
-        # Flush macOS DNS cache
-        subprocess.run(["dscacheutil", "-flushcache"], capture_output=True)
-        subprocess.run(["killall", "-HUP", "mDNSResponder"], capture_output=True)
+        elif os_name == "Linux":
+            # Linux (Ubuntu, Debian, etc.)
+            subprocess.run(["pkill", "-f", "9router"], capture_output=True)
+            try:
+                subprocess.run(["systemctl", "--user", "restart", "9router"], capture_output=True)
+            except:
+                pass
+
+        elif os_name == "Windows":
+            # Windows
+            subprocess.run(["taskkill", "/F", "/IM", "9router.exe", "/T"], capture_output=True, shell=True)
 
         print("\033[0;32m✔ تنظیمات با موفقیت ذخیره شد. 9Router آماده استفاده است.\033[0m")
     else:

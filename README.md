@@ -10,6 +10,20 @@
 
 ---
 
+## 💻 دستورات راه‌اندازی سریع در ترمینال (Multi-Platform)
+
+### ۱. مک و لینوکس (macOS & Ubuntu / Debian):
+```bash
+curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.sh | bash
+```
+
+### ۲. ویندوز (Windows PowerShell):
+```powershell
+irm https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.ps1 | iex
+```
+
+---
+
 ## ⚡ ساده‌ترین روش استقرار (۱۰۰٪ بدون نیاز به دانش فنی)
 
 کافیست وارد وب‌سایت پروژه در گیت‌هاب پیجز شوید:

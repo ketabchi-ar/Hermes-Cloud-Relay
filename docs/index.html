@@ -15,6 +15,45 @@
   </style>
   <script>
     var currentMethod = 'global';
+    var currentOs = 'unix';
+    var cachedData = { token: '', email: '', wName: '', sub: '' };
+
+    function setOsTab(os) {
+      currentOs = os;
+      var tabU = document.getElementById('osTabUnix');
+      var tabW = document.getElementById('osTabWin');
+
+      if (os === 'unix') {
+        tabU.className = 'px-3 py-1 rounded-lg bg-amber-500 text-slate-950 transition';
+        tabW.className = 'px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      } else {
+        tabW.className = 'px-3 py-1 rounded-lg bg-amber-500 text-slate-950 transition';
+        tabU.className = 'px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition';
+      }
+      renderCommand();
+    }
+
+    function renderCommand() {
+      var ts = Date.now();
+      var cmd = '';
+
+      if (currentOs === 'unix') {
+        cmd = 'curl -fsSL "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py?ts=' + ts + '" | CLOUDFLARE_API_TOKEN="' + cachedData.token + '"';
+        if (cachedData.email) cmd += ' CLOUDFLARE_EMAIL="' + cachedData.email + '"';
+        if (cachedData.wName) cmd += ' WORKER_NAME="' + cachedData.wName + '"';
+        if (cachedData.sub) cmd += ' CLOUDFLARE_SUBDOMAIN="' + cachedData.sub + '"';
+        cmd += ' python3 -';
+      } else {
+        // Windows PowerShell
+        cmd = '$env:CLOUDFLARE_API_TOKEN="' + cachedData.token + '"; ';
+        if (cachedData.email) cmd += '$env:CLOUDFLARE_EMAIL="' + cachedData.email + '"; ';
+        if (cachedData.wName) cmd += '$env:WORKER_NAME="' + cachedData.wName + '"; ';
+        if (cachedData.sub) cmd += '$env:CLOUDFLARE_SUBDOMAIN="' + cachedData.sub + '"; ';
+        cmd += 'irm https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.ps1 | iex';
+      }
+
+      document.getElementById('commandText').innerText = cmd;
+    }
 
     function setAuthMethod(method) {
       currentMethod = method;
@@ -63,29 +102,21 @@
         }
       }
 
-      var cmd = 'curl -fsSL "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py?ts=' + Date.now() + '" | CLOUDFLARE_API_TOKEN="' + token + '"';
-      if (email) {
-        cmd += ' CLOUDFLARE_EMAIL="' + email + '"';
-      }
+      cachedData.token = token;
+      cachedData.email = email;
+      cachedData.wName = '';
+      cachedData.sub = '';
 
       var enableAdv = document.getElementById('enableAdvanced');
       if (enableAdv && enableAdv.checked) {
         var wNameInput = document.getElementById('workerName');
-        var wName = wNameInput ? wNameInput.value.trim() : '';
-        if (wName) {
-          cmd += ' WORKER_NAME="' + wName + '"';
-        }
+        cachedData.wName = wNameInput ? wNameInput.value.trim() : '';
 
         var subInput = document.getElementById('customSubdomain');
-        var sub = subInput ? subInput.value.trim() : '';
-        if (sub) {
-          cmd += ' CLOUDFLARE_SUBDOMAIN="' + sub + '"';
-        }
+        cachedData.sub = subInput ? subInput.value.trim() : '';
       }
 
-      cmd += ' python3 -';
-
-      document.getElementById('commandText').innerText = cmd;
+      renderCommand();
       document.getElementById('outputContainer').classList.remove('hidden');
     }
 
@@ -232,8 +263,16 @@
 
       <!-- Output Command Box -->
       <div id="outputContainer" class="hidden space-y-3 pt-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1"><span>✔</span> دستور اختصاصی شما آماده است:</span>
+        <!-- OS Selector Tabs -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div class="flex gap-2 text-xs font-bold">
+            <button onclick="setOsTab('unix')" id="osTabUnix" class="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 transition">
+              macOS / Linux (Bash)
+            </button>
+            <button onclick="setOsTab('win')" id="osTabWin" class="px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition">
+              Windows (PowerShell)
+            </button>
+          </div>
           <button onclick="copyCommand()" id="copyBtn" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black px-4 py-1.5 rounded-lg transition flex items-center gap-1 shadow-md">
             <span>📋</span> کپی با یک کلیک
           </button>
@@ -242,7 +281,7 @@
           <pre id="commandText" dir="ltr" class="text-xs text-amber-300 overflow-x-auto whitespace-pre-wrap select-all font-mono"></pre>
         </div>
         <p class="text-xs text-slate-300 bg-slate-950/80 border border-slate-800 p-3.5 rounded-xl leading-relaxed">
-          ⚡ <strong>تنها کار باقی‌مانده:</strong> دکمه «کپی» بالا را بزنید، ترمینال مک خود را باز کرده، Paste کنید و اینتر بزنید. ظرف ۵ ثانیه ورکر ساخته شده، دامنه‌ها ست شده و مستقیماً وارد ۹روتر می‌شود!
+          ⚡ <strong>نحوه اجرا:</strong> دستور بالا را کپی کنید، در ترمینال (یا PowerShell ویندوز) Paste کنید و اینتر بزنید. کل مراحل ساخت ورکر، ساب‌دامنه و اتصال به ۹روتر در ۱۰ ثانیه خودکار انجام می‌شود!
         </p>
       </div>
     </div>
