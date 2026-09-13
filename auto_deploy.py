@@ -21,6 +21,18 @@ import urllib.error
 
 API_BASE = "https://api.cloudflare.com/client/v4"
 
+def prompt_input(prompt_text):
+    sys.stdout.write(prompt_text)
+    sys.stdout.flush()
+    try:
+        if sys.stdin.isatty():
+            return sys.stdin.readline().strip()
+        # If piped via curl | python3, read from /dev/tty
+        with open("/dev/tty", "r") as tty:
+            return tty.readline().strip()
+    except:
+        return ""
+
 def cf_request(endpoint, token, email=None, method="GET", data=None, content_type="application/json"):
     url = f"{API_BASE}{endpoint}"
     headers = {}
@@ -68,7 +80,7 @@ def main():
 
     if not token:
         print("\033[1;33m🔑 کلید یا توکن دسترسی Cloudflare خود را وارد کنید:\033[0m")
-        token = input("API Token / Global Key: ").strip()
+        token = prompt_input("API Token / Global Key: ")
 
     if not token:
         print("\033[0;31m❌ توکن وارد نشد. عملیات لغو شد.\033[0m")
@@ -77,7 +89,7 @@ def main():
     # Detect Global API Key (37 chars hex)
     if len(token) == 37 and not email:
         print("\033[1;33m📧 کلید شما از نوع Global API Key است. لطفاً ایمیل حساب کلودفلر خود را وارد کنید:\033[0m")
-        email = input("Cloudflare Email: ").strip()
+        email = prompt_input("Cloudflare Email: ")
 
     # 2. Verify Token & Get Account
     print("\n\033[0;34m1️⃣ در حال بررسی دسترسی به حساب کلودفلر...\033[0m")

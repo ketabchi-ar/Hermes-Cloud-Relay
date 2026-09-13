@@ -23,7 +23,13 @@
         return;
       }
 
-      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '" python3 -';
+      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '"';
+      var emailInput = document.getElementById('cfEmail');
+      var email = emailInput ? emailInput.value.trim() : '';
+      if (email) {
+        cmd += ' CLOUDFLARE_EMAIL="' + email + '"';
+      }
+      cmd += ' python3 -';
 
       document.getElementById('commandText').innerText = cmd;
       document.getElementById('outputContainer').classList.remove('hidden');
@@ -107,6 +113,7 @@
             </p>
           </div>
           <input type="password" id="cfToken" dir="ltr" placeholder="توکن ساخته شده را اینجا پیست کنید (مثلاً: vW8x_...)" class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
+          <input type="email" id="cfEmail" dir="ltr" placeholder="ایمیل اکانت کلودفلر (فقط اگر از Global API Key استفاده می‌کنید)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-300 transition outline-none mt-2">
         </div>
       </div>
 
