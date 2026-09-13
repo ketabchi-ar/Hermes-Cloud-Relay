@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #!/usr/bin/env python3
 """
 Hermes-Cloud-Relay: Zero-Touch 1-Click Deployer & 9Router Auto-Binder
@@ -152,14 +151,21 @@ def main():
     else:
         print("\033[1;33m⚠️ دامنه مستقلی در کلودفلر یافت نشد؛ از آدرس پیش‌فرض ورکر استفاده می‌شود.\033[0m")
 
-    # 4. Upload Worker Script
+    # 4. Load or Fetch Worker Script
     script_name = "hermes-cloud-relay"
     worker_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "index.js")
     if not os.path.exists(worker_file):
         worker_file = os.path.expanduser("~/Hermes-Cloud-Relay/src/index.js")
 
-    with open(worker_file, "r", encoding="utf-8") as f:
-        worker_code = f.read()
+    worker_code = None
+    if os.path.exists(worker_file):
+        with open(worker_file, "r", encoding="utf-8") as f:
+            worker_code = f.read()
+    else:
+        print("\033[0;34m📥 در حال دریافت آخرین نسخه کدهای ورکر از گیت‌هاب...\033[0m")
+        gh_worker_url = "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/src/index.js"
+        with urllib.request.urlopen(gh_worker_url) as resp:
+            worker_code = resp.read().decode("utf-8")
 
     print(f"\n\033[0;34m3️⃣ در حال دیپلوی خودکار ورکر ({script_name}) در کلودفلر...\033[0m")
     deploy_res = cf_request(
