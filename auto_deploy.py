@@ -41,36 +41,47 @@ def prompt_input(prompt_text):
 
 def cf_request(endpoint, token, email=None, method="GET", data=None, content_type="application/json"):
     url = f"{API_BASE}{endpoint}"
-    headers = {}
-    if email and len(token) == 37: # Global API Key format
-        headers["X-Auth-Key"] = token
-        headers["X-Auth-Email"] = email
-    else:
-        headers["Authorization"] = f"Bearer {token}"
 
-    if content_type:
-        headers["Content-Type"] = content_type
+    # Try Bearer Token first, then fallback to Global API Key if email present
+    auth_modes = [{"Authorization": f"Bearer {token}"}]
+    if email:
+        auth_modes.append({
+            "X-Auth-Key": token,
+            "X-Auth-Email": email
+        })
 
-    body = None
-    if data is not None:
-        if content_type == "application/json":
-            body = json.dumps(data).encode("utf-8")
-        elif isinstance(data, str):
-            body = data.encode("utf-8")
-        else:
-            body = data
+    last_res = None
+    for headers_dict in auth_modes:
+        headers = dict(headers_dict)
+        if content_type:
+            headers["Content-Type"] = content_type
 
-    req = urllib.request.Request(url, data=body, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req) as resp:
-            raw = resp.read().decode("utf-8")
-            return json.loads(raw) if "json" in resp.headers.get("Content-Type", "") else raw
-    except urllib.error.HTTPError as e:
-        err_body = e.read().decode("utf-8")
+        body = None
+        if data is not None:
+            if content_type == "application/json":
+                body = json.dumps(data).encode("utf-8")
+            elif isinstance(data, str):
+                body = data.encode("utf-8")
+            else:
+                body = data
+
+        req = urllib.request.Request(url, data=body, headers=headers, method=method)
         try:
-            return json.loads(err_body)
-        except:
-            return {"success": False, "errors": [{"message": err_body}]}
+            with urllib.request.urlopen(req) as resp:
+                raw = resp.read().decode("utf-8")
+                return json.loads(raw) if "json" in resp.headers.get("Content-Type", "") else raw
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8")
+            try:
+                last_res = json.loads(err_body)
+            except:
+                last_res = {"success": False, "errors": [{"message": err_body}]}
+            # If 401/403 or code 6003, try next auth mode
+            continue
+        except Exception as ex:
+            last_res = {"success": False, "errors": [{"message": str(ex)}]}
+
+    return last_res or {"success": False, "errors": [{"message": "Request failed"}]}
 
 def main():
     print("\033[1;36m" + "="*60 + "\033[0m")
