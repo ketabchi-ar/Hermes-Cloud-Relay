@@ -21,11 +21,15 @@ import urllib.error
 
 API_BASE = "https://api.cloudflare.com/client/v4"
 
-def cf_request(endpoint, token, method="GET", data=None, content_type="application/json"):
+def cf_request(endpoint, token, email=None, method="GET", data=None, content_type="application/json"):
     url = f"{API_BASE}{endpoint}"
-    headers = {
-        "Authorization": f"Bearer {token}",
-    }
+    headers = {}
+    if email and len(token) == 37: # Global API Key format
+        headers["X-Auth-Key"] = token
+        headers["X-Auth-Email"] = email
+    else:
+        headers["Authorization"] = f"Bearer {token}"
+
     if content_type:
         headers["Content-Type"] = content_type
 
