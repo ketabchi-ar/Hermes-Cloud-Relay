@@ -39,57 +39,48 @@
       
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
-          <h2 class="text-lg font-bold text-white">ویزارد راه‌اندازی ۱-کلیکی</h2>
-          <p class="text-xs text-slate-400">اطلاعات را وارد کنید تا دستور اختصاصی سیستم شما تولید شود</p>
+          <h2 class="text-lg font-bold text-white">راه‌اندازی کاملاً خودکار (فقط یک پیست!)</h2>
+          <p class="text-xs text-slate-400">تمام گزینه‌ها به صورت خودکار توسط سیستم شناسایی و تنظیم می‌شوند</p>
         </div>
-        <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full font-mono">نسخه ۱.۰</span>
+        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold">بدون تنظیمات دستی</span>
       </div>
 
       <div class="space-y-4">
-        <!-- Step 1: Cloudflare Token -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-bold text-slate-300">۱. توکن کلودفلر (Cloudflare API Token)</label>
-            <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="text-[11px] text-amber-400 hover:text-amber-300 transition flex items-center gap-1">
-              دریافت سریع توکن از کلودفلر ↗
+        <!-- Step 1: Cloudflare Token with 1-click pre-filled template -->
+        <div class="space-y-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <label class="text-xs font-bold text-slate-200">کلید دسترسی Cloudflare API Token:</label>
+            <a href="https://dash.cloudflare.com/profile/api-tokens?template=edit_cloudflare_workers" target="_blank" class="inline-flex items-center gap-1.5 text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-xl transition font-bold">
+              <span>🔗</span> کلیک کنید: صفحه آماده با تنظیمات از پیش پرشده کلودفلر ↗
             </a>
           </div>
-          <input type="password" id="cfToken" dir="ltr" placeholder="مثلاً: z8a7B_x9K..." class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 transition outline-none">
-          <p class="text-[10px] text-slate-500">توکن باید دسترسی ویرایش ورکرها (Workers Edit) را داشته باشد.</p>
-        </div>
-
-        <!-- Step 2: Custom Subdomain (Optional) -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-bold text-slate-300">
-              ۲. ساب‌دامنه اختصاصی 
-              <span class="text-[10px] bg-slate-800 text-slate-400 font-normal px-2 py-0.5 rounded-md mr-1.5">اختیاری - در صورت فیلتر بودن</span>
-            </label>
-            <span class="text-[10px] text-emerald-400 font-medium">برای ایران توصیه می‌شود</span>
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-3 text-[11px] text-slate-400 space-y-1">
+            <p>۱. روی دکمه لینک بالا کلیک کنید (تمام گزینه‌ها خودکار انتخاب شده‌اند).</p>
+            <p>۲. در پایین صفحه کلودفلر، دکمه آبی <strong>Continue to summary</strong> و سپس <strong>Create Token</strong> را بزنید.</p>
+            <p>۳. توکن ساخته شده را کپی کرده و در کادر زیر پیست کنید:</p>
           </div>
-          <input type="text" id="customSubdomain" dir="ltr" placeholder="مثال: ai-relay.yourdomain.com (خالی بگذارید تا از پیش‌فرض استفاده شود)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 transition outline-none">
-          <p class="text-[10px] text-slate-500">اگر خالی بگذارید، از ساب‌دامنه پیش‌فرض کلودفلر (workers.dev) استفاده می‌شود.</p>
+          <input type="password" id="cfToken" dir="ltr" placeholder="توکن ساخته شده را اینجا پیست کنید (مثلاً: vW8x_...)" class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-slate-100 transition outline-none shadow-inner">
         </div>
       </div>
 
       <!-- Generate Button -->
-      <button onclick="generateOneClickCommand()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black py-3 rounded-xl text-sm transition shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
-        <span>⚡</span> ساخت دستور راه‌اندازی اختصاصی
+      <button onclick="generateOneClickCommand()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+        <span>🚀</span> ساخت خودکار ورکر و اتصال به ۹روتر با ۱ کلیک
       </button>
 
       <!-- Output Command Box -->
       <div id="outputContainer" class="hidden space-y-3 pt-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-amber-400">دستور آماده اجرای شما:</span>
-          <button onclick="copyCommand()" id="copyBtn" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-lg transition flex items-center gap-1">
-            <span>📋</span> کپی دستور
+          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1"><span>✔</span> دستور اختصاصی شما آماده است:</span>
+          <button onclick="copyCommand()" id="copyBtn" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black px-4 py-1.5 rounded-lg transition flex items-center gap-1 shadow-md">
+            <span>📋</span> کپی با یک کلیک
           </button>
         </div>
         <div class="relative bg-slate-950 border border-slate-800 rounded-2xl p-4">
-          <pre id="commandText" dir="ltr" class="text-xs text-slate-200 overflow-x-auto whitespace-pre-wrap select-all font-mono"></pre>
+          <pre id="commandText" dir="ltr" class="text-xs text-amber-300 overflow-x-auto whitespace-pre-wrap select-all font-mono"></pre>
         </div>
-        <p class="text-[11px] text-slate-400 bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
-          💡 <strong>نحوه اجرا:</strong> ترمینال سیستم خود را باز کنید، دستور بالا را پیست کرده و اینتر را بزنید. کل فرآیند ساخت ورکر، ساب‌دامنه و اتصال به ۹روتر ظرف ۱۰ ثانیه خودکار انجام می‌شود.
+        <p class="text-xs text-slate-300 bg-slate-950/80 border border-slate-800 p-3.5 rounded-xl leading-relaxed">
+          ⚡ <strong>تنها کار باقی‌مانده:</strong> دکمه «کپی» بالا را بزنید، ترمینال مک خود را باز کرده، Paste کنید و اینتر بزنید. ظرف ۵ ثانیه ورکر ساخته شده، دامنه‌ها ست شده و مستقیماً وارد ۹روتر می‌شود!
         </p>
       </div>
     </div>
