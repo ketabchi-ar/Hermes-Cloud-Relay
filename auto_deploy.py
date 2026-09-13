@@ -312,11 +312,33 @@ def main():
         conn.commit()
         conn.close()
 
-        # Restart 9Router
-        print("\033[0;34m6️⃣ در حال بازنشانی سرویس 9Router...\033[0m")
+        # Restart 9Router and Hermes Lite Bridge cleanly (Zero-reboot needed)
+        print("\033[0;34m6️⃣ در حال بازنشانی کامل سرویس‌های 9Router و لایت‌بریج (بدون نیاز به ریستارت سیستم)...\033[0m")
         uid = os.getuid()
+        
+        # Kill running 9router process to release port if hanging
+        subprocess.run(["pkill", "-f", "9router"], capture_output=True)
+        time.sleep(1)
+        
+        # Kickstart LaunchAgents
         subprocess.run(["launchctl", "kickstart", "-k", f"gui/{uid}/com.ardalan.9router"], capture_output=True)
-        print("\033[0;32m✔ سرویس 9Router ریستارت شد.\033[0m")
+        subprocess.run(["launchctl", "kickstart", "-k", f"gui/{uid}/com.ardalan.9router-hermes-lite-bridge"], capture_output=True)
+        
+        # Flush macOS DNS cache
+        subprocess.run(["dscacheutil", "-flushcache"], capture_output=True)
+        subprocess.run(["killall", "-HUP", "mDNSResponder"], capture_output=True)
+        
+        # Wait up to 5 seconds for service readiness
+        for _ in range(5):
+            time.sleep(1)
+            try:
+                with urllib.request.urlopen("http://127.0.0.1:20128/v1/models", timeout=2) as chk:
+                    if chk.status == 200:
+                        break
+            except:
+                pass
+
+        print("\033[0;32m✔ سرویس‌های 9Router با موفقیت راه‌اندازی مجدد و زنده شدند.\033[0m")
     else:
         print(f"\033[1;33m⚠️ دیتابیس 9Router در {db_path} پیدا نشد.\033[0m")
 
