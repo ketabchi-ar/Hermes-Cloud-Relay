@@ -1,12 +1,35 @@
 # ⚡ Hermes-Cloud-Relay
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ketabchi-ar/Hermes-Cloud-Relay)
+
 **Serverless AI Gateway & Reverse Proxy on Cloudflare Workers with Web UI, Multi-Account Key Pool & Automatic Quota Failover**
 
 طراحی شده ویژه کاربران و توسعه‌دهندگان ایرانی برای اتصال مستقیم، پرسرعت و بدون نیاز به فیلترشکن به سرویس‌های هوش مصنوعی (Google Gemini, OpenAI / Codex, Anthropic Claude) با مدیریت هوشمند محدودیت مصرف (Rate Limit Failover) و داشبورد گرافیکی اختصاصی.
 
 ---
 
-## ✨ امکانات کلیدی (Features)
+## ⚡ ساده‌ترین روش استقرار (۱۰۰٪ بدون نیاز به ترمینال)
+
+### روش ۱: استقرار با یک کلیک (One-Click Web Deploy)
+کافیست روی دکمه زیر کلیک کنید و در صفحه باز شده دکمه **Deploy** کلودفلر را بزنید:
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ketabchi-ar/Hermes-Cloud-Relay)
+
+---
+
+### روش ۲: کپی مستقیم کد در داشبورد کلودفلر (فوق‌العاده ساده و بدون باگ لاگین)
+اگر نمی‌خواهید درگیر ابزارهای ترمینال، نود یا ارورهای ۴۰۳ لاگین شوید:
+1. وارد داشبورد کلودفلر ([dash.cloudflare.com](https://dash.cloudflare.com)) شوید.
+2. از منوی سمت چپ به بخش **Workers & Pages** بروید و روی **Create Application** و سپس **Create Worker** کلیک کنید.
+3. یک نام انتخاب کنید (مثلاً `hermes-relay`) و دکمه **Deploy** را بزنید.
+4. سپس روی **Edit Code** کلیک کنید.
+5. تمام محتوای فایل [`src/index.js`](src/index.js) را کپی کرده و در ادیتور کلودفلر پیست کنید و دکمه **Save and Deploy** را بزنید.
+6. **(بسیار مهم برای ایران):** در صفحه ورکر به تب **Settings > Domains & Routes** بروید، روی **Add > Custom Domain** بزنید و یک ساب‌دامنه از دامنه خودتان (مثلاً `ai.yourdomain.com`) ست کنید تا بدون فیلترشکن باز شود.
+7. حالا آدرس ساب‌دامنه را در مرورگر باز کنید و با رفتن به `/admin` وارد پنل مدیریت هوشمند شوید!
+
+---
+
+## 💻 روش ۳: استقرار از طریق ترمینال (برای برنامه‌نویسان)
 
 1. **بدون نیاز به VPN و بدون سرور (Serverless):**
    - اجرا روی شبکه ابری کلودفلر (Cloudflare Workers) به صورت ۱۰۰٪ رایگان.
