@@ -23,7 +23,7 @@
         return;
       }
 
-      var cmd = 'curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="' + token + '"';
+      var cmd = 'curl -fsSL "https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py?ts=' + Date.now() + '" | CLOUDFLARE_API_TOKEN="' + token + '"';
       var emailInput = document.getElementById('cfEmail');
       var email = emailInput ? emailInput.value.trim() : '';
       if (email) {
