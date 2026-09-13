@@ -1,14 +1,24 @@
 # ⚡ Hermes-Cloud-Relay
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ketabchi-ar/Hermes-Cloud-Relay)
+[![Deploy with 1-Click Wizard](https://img.shields.io/badge/🌐%20Web%20Wizard-1--Click%20Deploy-amber?style=for-the-badge)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-emerald?style=flat-square)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **Serverless AI Gateway & Reverse Proxy on Cloudflare Workers with Web UI, Multi-Account Key Pool & Automatic Quota Failover**
 
-طراحی شده ویژه کاربران و توسعه‌دهندگان ایرانی برای اتصال مستقیم، پرسرعت و بدون نیاز به فیلترشکن به سرویس‌های هوش مصنوعی (Google Gemini, OpenAI / Codex, Anthropic Claude) با مدیریت هوشمند محدودیت مصرف (Rate Limit Failover) و داشبورد گرافیکی اختصاصی.
+👉 **[ورود به صفحه وب راه‌اندازی ۱-کلیکی (GitHub Pages)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)**
 
 ---
 
-## ⚡ ساده‌ترین روش استقرار (۱۰۰٪ بدون نیاز به ترمینال)
+## ⚡ ساده‌ترین روش استقرار (۱۰۰٪ بدون نیاز به دانش فنی)
+
+کافیست وارد وب‌سایت پروژه در گیت‌هاب پیجز شوید:
+🌐 **[https://ketabchi-ar.github.io/Hermes-Cloud-Relay/](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)**
+
+در این صفحه:
+1. توکن کلودفلر خود را وارد می‌کنید.
+2. ساب‌دامنه اختصاصی را (در صورت تمایل و اختیاری) می‌نویسید؛ اگر خالی بگذارید از دامنه پیش‌فرض استفاده می‌شود.
+3. دکمه ساخت دستور را می‌زنید و با یک کلیک کپی کرده و اجرا می‌کنید؛ کل مراحل دیپلوی و اتصال به ۹روتر به صورت خودکار انجام می‌شود!
 
 ### روش ۱: استقرار با یک کلیک (One-Click Web Deploy)
 کافیست روی دکمه زیر کلیک کنید و در صفحه باز شده دکمه **Deploy** کلودفلر را بزنید:
