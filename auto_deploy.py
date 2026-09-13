@@ -87,6 +87,8 @@ def main():
 
     # 3. Get Zones (Domains)
     print("\n\033[0;34m2️⃣ در حال دریافت لیست دامنه‌های متصل...\033[0m")
+    custom_sub_env = os.environ.get("CLOUDFLARE_SUBDOMAIN", "").strip()
+
     zones_res = cf_request(f"/zones?account.id={account_id}", token)
     zones = zones_res.get("result", [])
 
@@ -94,13 +96,29 @@ def main():
     domain_name = None
     target_subdomain = None
 
-    if zones:
+    if custom_sub_env:
+        # Match zone for custom subdomain
+        parts = custom_sub_env.split(".")
+        if len(parts) >= 2:
+            base_d = ".".join(parts[-2:])
+            for z in zones:
+                if z["name"] == base_d:
+                    zone_id = z["id"]
+                    domain_name = z["name"]
+                    target_subdomain = custom_sub_env
+                    break
+        if not zone_id and zones:
+            zone_id = zones[0]["id"]
+            domain_name = zones[0]["name"]
+            target_subdomain = custom_sub_env
+        print(f"\033[0;32m✔ ساب‌دامنه اختصاصی سفارشی: {target_subdomain}\033[0m")
+    elif zones:
         zone = zones[0]
         zone_id = zone["id"]
         domain_name = zone["name"]
         target_subdomain = f"ai-relay.{domain_name}"
-        print(f"\033[0;32m✔ دامنه پیدا شد: {domain_name}\033[0m")
-        print(f"\033[0;32m✔ ساب‌دامنه انتخابی خودکار: {target_subdomain}\033[0m")
+        print(f"\033[0;32m✔ دامنه فعال پیدا شد: {domain_name}\033[0m")
+        print(f"\033[0;32m✔ ساب‌دامنه خودکار: {target_subdomain}\033[0m")
     else:
         print("\033[1;33m⚠️ دامنه ثبت‌شده‌ای روی این اکانت پیدا نشد. از ساب‌دامنه پیش‌فرض workers.dev استفاده خواهد شد.\033[0m")
 

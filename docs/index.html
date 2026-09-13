@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ Hermes Cloud Relay | راه‌اندازی سریع ۱-کلیکی</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Vazirmatn', -apple-system, sans-serif; }
+    [dir="ltr"] { direction: ltr; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-amber-500 selection:text-black">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 -left-40 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-4xl mx-auto px-4 py-12 space-y-10">
+    
+    <!-- Hero Section -->
+    <div class="text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
+        <span>⚡</span> درگاه هوشمند هوش مصنوعی سرورلس و رایگان
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white">
+        اتصال <span class="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">بدون فیلترشکن</span> به هوش مصنوعی
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        راه‌اندازی خودکار رله اختصاصی کلودفلر و اتصال مستقیم به ۹روتر و هرمس با دور زدن تحریم‌های گوگل، جمینای، آنتی‌گراویتی و کلود.
+      </p>
+    </div>
+
+    <!-- Interactive Setup Wizard Card -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white">ویزارد راه‌اندازی ۱-کلیکی</h2>
+          <p class="text-xs text-slate-400">اطلاعات را وارد کنید تا دستور اختصاصی سیستم شما تولید شود</p>
+        </div>
+        <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full font-mono">نسخه ۱.۰</span>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Step 1: Cloudflare Token -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-300">۱. توکن کلودفلر (Cloudflare API Token)</label>
+            <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="text-[11px] text-amber-400 hover:text-amber-300 transition flex items-center gap-1">
+              دریافت سریع توکن از کلودفلر ↗
+            </a>
+          </div>
+          <input type="password" id="cfToken" dir="ltr" placeholder="مثلاً: z8a7B_x9K..." class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 transition outline-none">
+          <p class="text-[10px] text-slate-500">توکن باید دسترسی ویرایش ورکرها (Workers Edit) را داشته باشد.</p>
+        </div>
+
+        <!-- Step 2: Custom Subdomain (Optional) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-300">
+              ۲. ساب‌دامنه اختصاصی 
+              <span class="text-[10px] bg-slate-800 text-slate-400 font-normal px-2 py-0.5 rounded-md mr-1.5">اختیاری - در صورت فیلتر بودن</span>
+            </label>
+            <span class="text-[10px] text-emerald-400 font-medium">برای ایران توصیه می‌شود</span>
+          </div>
+          <input type="text" id="customSubdomain" dir="ltr" placeholder="مثال: ai-relay.yourdomain.com (خالی بگذارید تا از پیش‌فرض استفاده شود)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 transition outline-none">
+          <p class="text-[10px] text-slate-500">اگر خالی بگذارید، از ساب‌دامنه پیش‌فرض کلودفلر (workers.dev) استفاده می‌شود.</p>
+        </div>
+      </div>
+
+      <!-- Generate Button -->
+      <button onclick="generateOneClickCommand()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black py-3 rounded-xl text-sm transition shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
+        <span>⚡</span> ساخت دستور راه‌اندازی اختصاصی
+      </button>
+
+      <!-- Output Command Box -->
+      <div id="outputContainer" class="hidden space-y-3 pt-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-amber-400">دستور آماده اجرای شما:</span>
+          <button onclick="copyCommand()" id="copyBtn" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-lg transition flex items-center gap-1">
+            <span>📋</span> کپی دستور
+          </button>
+        </div>
+        <div class="relative bg-slate-950 border border-slate-800 rounded-2xl p-4">
+          <pre id="commandText" dir="ltr" class="text-xs text-slate-200 overflow-x-auto whitespace-pre-wrap select-all font-mono"></pre>
+        </div>
+        <p class="text-[11px] text-slate-400 bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
+          💡 <strong>نحوه اجرا:</strong> ترمینال سیستم خود را باز کنید، دستور بالا را پیست کرده و اینتر را بزنید. کل فرآیند ساخت ورکر، ساب‌دامنه و اتصال به ۹روتر ظرف ۱۰ ثانیه خودکار انجام می‌شود.
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Features -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-slate-900/40 border border-slate-800/80 p-5 rounded-2xl space-y-2">
+        <div class="text-xl">🚀</div>
+        <h3 class="text-sm font-bold text-white">۱۰۰٪ سرورلس و رایگان</h3>
+        <p class="text-xs text-slate-400">بدون نیاز به پرداخت هزینه یا خرید سرور مجازی، روی شبکه پرسرعت ابری کلودفلر اجرا می‌شود.</p>
+      </div>
+      <div class="bg-slate-900/40 border border-slate-800/80 p-5 rounded-2xl space-y-2">
+        <div class="text-xl">🔄</div>
+        <h3 class="text-sm font-bold text-white">چرخش هوشمند اکانت‌ها</h3>
+        <p class="text-xs text-slate-400">اگر سهمیه یک اکانت به اتمام برسد، رله فوراً روی اکانت بعدی سوییچ می‌کند تا کار شما متوقف نشود.</p>
+      </div>
+      <div class="bg-slate-900/40 border border-slate-800/80 p-5 rounded-2xl space-y-2">
+        <div class="text-xl">🛡️</div>
+        <h3 class="text-sm font-bold text-white">سازگار با ۹روتر و هرمس</h3>
+        <p class="text-xs text-slate-400">ترافیک گوگل و جمینای را از تونل رد می‌کند و تمام سایت‌های ایرانی شما با حداکثر سرعت باز می‌مانند.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-600 pt-6 border-t border-slate-900">
+      توسعه یافته توسط <a href="https://github.com/ketabchi-ar/Hermes-Cloud-Relay" target="_blank" class="text-slate-400 hover:text-amber-400 transition">Ardalan Ketabchi</a> | تحت لایسنس MIT
+    </footer>
+
+  </div>
+
+  <script>
+    function generateOneClickCommand() {
+      const token = document.getElementById('cfToken').value.trim();
+      const sub = document.getElementById('customSubdomain').value.trim();
+
+      if (!token) {
+        alert('لطفاً توکن کلودفلر خود را وارد کنید.');
+        return;
+      }
+
+      let cmd = \`curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/auto_deploy.py | CLOUDFLARE_API_TOKEN="\${token}" python3 -\`;
+      if (sub) {
+        cmd = \`CLOUDFLARE_SUBDOMAIN="\${sub}" \` + cmd;
+      }
+
+      document.getElementById('commandText').innerText = cmd;
+      document.getElementById('outputContainer').classList.remove('hidden');
+    }
+
+    function copyCommand() {
+      const text = document.getElementById('commandText').innerText;
+      navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copyBtn');
+      btn.innerHTML = '<span>✔</span> کپی شد!';
+      setTimeout(() => {
+        btn.innerHTML = '<span>📋</span> کپی دستور';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
