@@ -20,14 +20,11 @@ import ssl
 import urllib.request
 import urllib.error
 
-# Bypass macOS Python missing root CA certificates bug
+# Globally disable SSL certificate verification on broken macOS Python setups
 try:
-    ssl_context = ssl.create_default_context()
+    ssl._create_default_https_context = ssl._create_unverified_context
 except:
-    ssl_context = ssl._create_unverified_context()
-
-# If certifi is not installed or macOS certificates are missing
-ssl_unverified_context = ssl._create_unverified_context()
+    pass
 
 API_BASE = "https://api.cloudflare.com/client/v4"
 
@@ -66,12 +63,7 @@ def cf_request(endpoint, token, email=None, method="GET", data=None, content_typ
 
     req = urllib.request.Request(url, data=body, headers=headers, method=method)
     try:
-        try:
-            resp_handle = urllib.request.urlopen(req, context=ssl_context)
-        except (urllib.error.URLError, ssl.SSLCertVerificationError):
-            resp_handle = urllib.request.urlopen(req, context=ssl_unverified_context)
-
-        with resp_handle as resp:
+        with urllib.request.urlopen(req) as resp:
             raw = resp.read().decode("utf-8")
             return json.loads(raw) if "json" in resp.headers.get("Content-Type", "") else raw
     except urllib.error.HTTPError as e:
