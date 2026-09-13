@@ -4,125 +4,53 @@
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-emerald?style=flat-square)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-**Serverless AI Gateway & Reverse Proxy on Cloudflare Workers with Web UI, Multi-Account Key Pool & Automatic Quota Failover**
+**درگاه سرورلس و رله ابری هوشمند روی Cloudflare Workers ویژه اتصال مستقیم، پرسرعت و بدون نیاز به فیلترشکن ۹روتر به مدل‌های هوش مصنوعی (Google Gemini, Antigravity, Claude, OpenAI)**
 
-👉 **[ورود به صفحه وب راه‌اندازی ۱-کلیکی (GitHub Pages)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)**
-
----
-
-## 💻 دستورات راه‌اندازی سریع در ترمینال (Multi-Platform)
-
-### ۱. مک و لینوکس (macOS & Ubuntu / Debian):
-```bash
-curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.sh | bash
-```
-
-### ۲. ویندوز (Windows PowerShell):
-```powershell
-irm https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.ps1 | iex
-```
+👉 **[ورود به صفحه وب راه‌اندازی ویزارد (GitHub Pages)](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)**
 
 ---
 
-## ⚡ ساده‌ترین روش استقرار (۱۰۰٪ بدون نیاز به دانش فنی)
+## ✨ چرا این پروژه؟ (حل قطعی مشکل فیلترشکن در ایران)
 
-کافیست وارد وب‌سایت پروژه در گیت‌هاب پیجز شوید:
-🌐 **[https://ketabchi-ar.github.io/Hermes-Cloud-Relay/](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/)**
+در ایران برای استفاده از مدل‌های هوش مصنوعی (مثل گوگل جمینای و آنتی‌گراویتی)، روشن بودن فیلترشکن ضروری است، اما با روشن بودن فیلترشکن تمام سایت‌های ایرانی، درگاه‌های بانکی، پنل‌های پیامک و سامانه‌های اداری مختل می‌شوند.
 
-در این صفحه:
-1. توکن کلودفلر خود را وارد می‌کنید.
-2. ساب‌دامنه اختصاصی را (در صورت تمایل و اختیاری) می‌نویسید؛ اگر خالی بگذارید از دامنه پیش‌فرض استفاده می‌شود.
-3. دکمه ساخت دستور را می‌زنید و با یک کلیک کپی کرده و اجرا می‌کنید؛ کل مراحل دیپلوی و اتصال به ۹روتر به صورت خودکار انجام می‌شود!
-
-### روش ۱: استقرار با یک کلیک (One-Click Web Deploy)
-کافیست روی دکمه زیر کلیک کنید و در صفحه باز شده دکمه **Deploy** کلودفلر را بزنید:
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ketabchi-ar/Hermes-Cloud-Relay)
+این پروژه یک ورکر ابری اختصاصی روی شبکه جهانی کلودفلر می‌سازد و مستقیماً آن را در **پایگاه داده ۹روتر سیستم شما** ثبت می‌کند؛ به‌طوری که:
+1. **سایت‌های ایرانی** مستقیماً و با حداکثر سرعت اینترنت ایران باز می‌شوند.
+2. **درخواست‌های هوش مصنوعی ۹روتر** بدون نیاز به فیلترشکن از رله اختصاصی کلودفلر عبور می‌کنند و تحریم‌ها دور زده می‌شوند.
 
 ---
 
-### روش ۲: کپی مستقیم کد در داشبورد کلودفلر (فوق‌العاده ساده و بدون باگ لاگین)
-اگر نمی‌خواهید درگیر ابزارهای ترمینال، نود یا ارورهای ۴۰۳ لاگین شوید:
-1. وارد داشبورد کلودفلر ([dash.cloudflare.com](https://dash.cloudflare.com)) شوید.
-2. از منوی سمت چپ به بخش **Workers & Pages** بروید و روی **Create Application** و سپس **Create Worker** کلیک کنید.
-3. یک نام انتخاب کنید (مثلاً `hermes-relay`) و دکمه **Deploy** را بزنید.
-4. سپس روی **Edit Code** کلیک کنید.
-5. تمام محتوای فایل [`src/index.js`](src/index.js) را کپی کرده و در ادیتور کلودفلر پیست کنید و دکمه **Save and Deploy** را بزنید.
-6. **(بسیار مهم برای ایران):** در صفحه ورکر به تب **Settings > Domains & Routes** بروید، روی **Add > Custom Domain** بزنید و یک ساب‌دامنه از دامنه خودتان (مثلاً `ai.yourdomain.com`) ست کنید تا بدون فیلترشکن باز شود.
-7. حالا آدرس ساب‌دامنه را در مرورگر باز کنید و با رفتن به `/admin` وارد پنل مدیریت هوشمند شوید!
+## 🚀 روش‌های استقرار (۳ روش مختلف بر اساس نیاز شما)
+
+### روش ۱: راه‌اندازی خودکار با ۱ دستور در خط فرمان (پیشنهادی)
+کافیست وارد [صفحه وب ویزارد](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/) شوید، کلید کلودفلر را وارد کنید و دستور اختصاصی سیستم‌عامل خود را کپی و اجرا کنید.
+
+* **مک و لینوکس (macOS & Ubuntu / Debian):**
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.sh | bash
+  ```
+
+* **ویندوز (Windows PowerShell):**
+  ```powershell
+  irm https://raw.githubusercontent.com/ketabchi-ar/Hermes-Cloud-Relay/main/install.ps1 | iex
+  ```
 
 ---
 
-## 💻 روش ۳: استقرار از طریق ترمینال (برای برنامه‌نویسان)
-
-1. **بدون نیاز به VPN و بدون سرور (Serverless):**
-   - اجرا روی شبکه ابری کلودفلر (Cloudflare Workers) به صورت ۱۰۰٪ رایگان.
-   - امکان اتصال دامنه یا ساب‌دامنه اختصاصی جهت دسترسی آزاد و بدون فیلتر در ایران.
-
-2. **داشبورد مدیریت گرافیکی (`/admin`):**
-   - طراحی مدرن و ریسپانسیو با رابط کاربری فارسی و دارک‌مود.
-   - مشاهده آمار زنده درخواست‌های موفق، ناموفق و رخدادهای تعویض کلید (Failover).
-
-3. **استخر چند اکانته و چرخش خودکار (Key Pool & Smart Quota Failover):**
-   - افزودن نامحدود اکانت و کلید API برای هر سرویس.
-   - در صورت اتمام سهمیه یا خطای `429 Too Many Requests` روی یک اکانت، سیستم به صورت کاملاً خودکار و آنی به اکانت بعدی سوییچ کرده و به درخواست کاربر پاسخ می‌دهد (Zero Downtime).
-   - ورود خودکار اکانت پرشده به حالت خنک‌سازی (Cool-down) به مدت ۵ دقیقه.
-
-4. **پشتیبانی از ارائه‌دهندگان مطرح:**
-   - 🟢 **Google Gemini API** (`/gemini/*` یا `/v1beta/*`)
-   - 🟢 **OpenAI / Codex** (`/openai/*` یا `/v1/*`)
-   - 🟢 **Anthropic Claude** (`/claude/*`)
-
-5. **امنیت و احراز هویت اختصاصی:**
-   - قابلیت تعیین رمز عبور برای پنل ادمین.
-   - صدور توکن دسترسی اختصاصی (`x-relay-key` یا `Bearer`) جهت جلوگیری از مصرف عمومی یا ناشناس.
+### روش ۲: ویزارد وب ۱۰۰٪ آنلاین (مشابه BPB Wizard - بدون ترمینال)
+اگر نمی‌خواهید هیچ دستوری در ترمینال بزنید:
+1. وارد [وب‌سایت پروژه](https://ketabchi-ar.github.io/Hermes-Cloud-Relay/) شوید و تب **روش ۲: ویزارد وب ۱۰۰٪ آنلاین** را انتخاب کنید.
+2. کلید یا توکن کلودفلر را وارد کنید و دکمه **«ساخت و استقرار مستقیم ورکر در کلودفلر»** را بزنید.
+3. در عرض چند ثانیه ورکر در اکانت کلودفلر شما ساخته می‌شود و آدرس رله به شما تحویل داده خواهد شد.
 
 ---
 
-## 🚀 نحوه نصب و استقرار (Quick Deployment)
-
-### روش اول: دیپلوی خودکار با Wrangler CLI (پیشنهادی)
-
-```bash
-# ۱. کلون کردن مخزن
-git clone https://github.com/ketabchi-ar/Hermes-Cloud-Relay.git
-cd Hermes-Cloud-Relay
-
-# ۲. ورود به حساب کلودفلر (یک‌بار)
-npx wrangler login
-
-# ۳. ساخت دیتابیس KV برای ذخیره تنظیمات و کلیدها
-npx wrangler kv namespace create RELAY_KV
-
-# پس از اجرای دستور فوق، مقادیر id را داخل wrangler.toml قرار دهید.
-
-# ۴. دیپلوی ورکر
-npx wrangler deploy
-```
-
-### روش دوم: کپی مستقیم کد در پنل کلودفلر
-1. وارد داشبورد کلودفلر شوید > **Workers & Pages** > **Create Application**.
-2. یک ورکر بسازید و روی **Edit Code** کلیک کنید.
-3. تمام محتوای فایل `src/index.js` را کپی کرده و پیست کنید، سپس **Save and Deploy** را بزنید.
-4. در بخش **Settings > Domains & Routes** یک ساب‌دامنه از دامنه اختصاصی خود (مثلاً `ai.yourdomain.com`) به ورکر متصل نمایید.
-
----
-
-## ⚙️ نحوه اتصال به هرمس (Hermes Agent Configuration)
-
-برای اینکه هرمس شما بدون فیلترشکن مستقیم به مدل دسترسی داشته باشد:
-
-در فایل کانفیگ هرمس یا ابزارهای مجهز به API OpenAI / Gemini، آدرس پایه (Base URL) را برابر با آدرس ورکر خود قرار دهید:
-
-```yaml
-# نمونه برای Gemini در Hermes
-model: ag/gemini-3.8-flash-medium
-base_url: https://ai.yourdomain.com/gemini/v1beta
-headers:
-  x-relay-key: "کلید_تعریف_شده_شما_در_پنل"
-```
+### روش ۳: کپی دستی کد در داشبورد کلودفلر
+1. وارد داشبورد کلودفلر شوید > **Workers & Pages** > **Create Worker**.
+2. کدهای رسمی موجود در فایل [`src/index.js`](src/index.js) را کپی کرده و در ادیتور کلودفلر پیست نمایید و دکمه **Save and deploy** را بزنید.
+3. آدرس ورکر ساخته‌شده را کپی کرده و در بخش **Proxy Pools** نرم‌افزار ۹روتر قرار دهید.
 
 ---
 
 ## 🛡 لایسنس
-این پروژه تحت لایسنس MIT منتشر شده است و برای تمام کاربران و توسعه‌دهندگان رایگان و متن‌باز است.
+این پروژه تحت لایسنس MIT به صورت ۱۰۰٪ رایگان و متن‌باز منتشر شده است.

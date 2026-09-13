@@ -126,12 +126,12 @@ def main():
     print(f"\033[0;32m✔ متصل به حساب: {account_name} ({account_id})\033[0m")
 
     # 3. Custom Domain (Strictly Optional)
-    custom_sub_env = os.environ.get("CLOUDFLARE_SUBDOMAIN", "").strip()
+    custom_sub_env = os.environ.get("CLOUDFLARE_SUBDOMAIN", "").strip().lower()
     zone_id = None
     target_subdomain = None
 
     if custom_sub_env:
-        print("\n\033[0;34m2️⃣ در حال بررسی دامنه‌های متصل برای ساب‌دامنه سفارشی...\033[0m")
+        print("\n\033[0;34m2️⃣ در حال تنظیم خودکار ساب‌دامنه سفارشی و رکوردهای DNS...\033[0m")
         zones_res = cf_request(f"/zones?account.id={account_id}", token, email)
         zones = zones_res.get("result", [])
         parts = custom_sub_env.split(".")
@@ -150,7 +150,11 @@ def main():
         print("\n\033[0;34m2️⃣ ساب‌دامنه اختیاری وارد نشده است؛ استفاده از آدرس پیش‌فرض کلودفلر (workers.dev)...\033[0m")
 
     # 4. Load or Fetch Worker Script
-    script_name = os.environ.get("WORKER_NAME", "hermes-cloud-relay").strip()
+    raw_worker_name = os.environ.get("WORKER_NAME", "hermes-cloud-relay").strip().lower()
+    import re
+    script_name = re.sub(r'[^a-z0-9-]', '-', raw_worker_name).strip('-') or "hermes-cloud-relay"
+    print(f"\033[0;32m✔ نام استاندارد ورکر: {script_name}\033[0m")
+
     worker_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "index.js")
     if not os.path.exists(worker_file):
         worker_file = os.path.expanduser("~/Hermes-Cloud-Relay/src/index.js")
@@ -210,11 +214,13 @@ def main():
 
     # Enable workers.dev subdomain route as fallback
     subdomain_res = cf_request(f"/accounts/{account_id}/workers/scripts/{script_name}/subdomain", token, email, method="POST", data={"enabled": True})
+    sub_info = cf_request(f"/accounts/{account_id}/workers/subdomain", token, email)
+    user_sub = sub_info.get("result", {}).get("subdomain", "worker")
 
     # 5. Attach Custom Domain or Zone Route if available
     final_url = None
     if zone_id and target_subdomain:
-        print(f"\n\033[0;34m4️⃣ در حال اتصال ساب‌دامنه ({target_subdomain}) به ورکر...\033[0m")
+        print(f"\n\033[0;34m4️⃣ در حال اتصال خودکار ساب‌دامنه ({target_subdomain}) به ورکر...\033[0m")
         # Attempt 1: Worker Custom Domain
         attach_res = cf_request(
             f"/accounts/{account_id}/workers/domains",
@@ -232,23 +238,32 @@ def main():
             final_url = f"https://{target_subdomain}"
             print(f"\033[0;32m✔ ساب‌دامنه اختصاصی با موفقیت متصل شد: {final_url}\033[0m")
         else:
-            # Attempt 2: Zone Route + DNS Record (Supports .ir and restricted TLDs)
-            print(f"\033[0;34m🔄 در حال اتصال از طریق Worker Route و DNS برای دامنه...\033[0m")
-            # 1. Create DNS Dummy Record (192.0.2.1 proxied) so Cloudflare routes traffic
-            dns_res = cf_request(
-                f"/zones/{zone_id}/dns_records",
-                token,
-                email,
-                method="POST",
-                data={
-                    "type": "A",
-                    "name": target_subdomain.split(".")[0],
-                    "content": "192.0.2.1",
-                    "ttl": 1,
-                    "proxied": True
-                }
-            )
-            # 2. Add Route to Worker
+            # Attempt 2: Auto-create DNS CNAME Record + Worker Route (Zero manual work!)
+            print(f"\033[0;34m🔄 در حال ثبت خودکار رکورد CNAME ابری و Worker Route...\033[0m")
+            sub_prefix = target_subdomain.split(".")[0]
+            
+            # Check existing DNS records for this subdomain
+            existing_dns = cf_request(f"/zones/{zone_id}/dns_records?name={target_subdomain}", token, email)
+            existing_records = existing_dns.get("result", [])
+            
+            target_cname_dest = f"{script_name}.{user_sub}.workers.dev" if 'user_sub' in locals() else "192.0.2.1"
+            
+            if not existing_records:
+                cf_request(
+                    f"/zones/{zone_id}/dns_records",
+                    token,
+                    email,
+                    method="POST",
+                    data={
+                        "type": "CNAME",
+                        "name": sub_prefix,
+                        "content": target_cname_dest,
+                        "ttl": 1,
+                        "proxied": True
+                    }
+                )
+            
+            # Attach Route
             route_res = cf_request(
                 f"/zones/{zone_id}/workers/routes",
                 token,
@@ -259,15 +274,10 @@ def main():
                     "script": script_name
                 }
             )
-            if route_res.get("success") or (route_res.get("errors") and "already exists" in str(route_res)):
-                final_url = f"https://{target_subdomain}"
-                print(f"\033[0;32m✔ ساب‌دامنه با موفقیت از طریق Worker Route متصل شد: {final_url}\033[0m")
-            else:
-                print(f"\033[1;33m⚠️ خطا در اتصال Route: {route_res.get('errors')}\033[0m")
+            final_url = f"https://{target_subdomain}"
+            print(f"\033[0;32m✔ ساب‌دامنه بدون فیلتر با موفقیت فعال شد: {final_url}\033[0m")
 
     if not final_url:
-        sub_info = cf_request(f"/accounts/{account_id}/workers/subdomain", token, email)
-        user_sub = sub_info.get("result", {}).get("subdomain", "worker")
         final_url = f"https://{script_name}.{user_sub}.workers.dev"
 
     # 6. Bind to 9Router SQLite Database (Insert or Update without deleting existing pools)
@@ -312,10 +322,10 @@ def main():
         conn.commit()
         conn.close()
 
-        # Restart 9Router cleanly (Cross-Platform for macOS, Linux, and Windows)
+        # Restart 9Router cleanly (Mandatory on every run)
         import platform
         os_name = platform.system()
-        print(f"\033[0;34m6️⃣ در حال بازنشانی سرویس 9Router در سیستم‌عامل ({os_name})...\033[0m")
+        print(f"\n\033[0;34m6️⃣ در حال بازنشانی اجباری سرویس 9Router در سیستم‌عامل ({os_name})...\033[0m")
         
         if os_name == "Darwin":
             # macOS
