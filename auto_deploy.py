@@ -267,8 +267,8 @@ def main():
         cur = conn.cursor()
         cur.execute("""
             UPDATE proxyPools 
-            SET config = json_set(config, '$.proxyUrl', ?) 
-            WHERE type = 'cloudflare' OR json_extract(config, '$.name') = 'cloudflare-relay';
+            SET data = json_set(data, '$.proxyUrl', ?) 
+            WHERE type = 'cloudflare' OR json_extract(data, '$.name') = 'cloudflare-relay';
         """, (final_url,))
         conn.commit()
         conn.close()

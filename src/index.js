@@ -584,7 +584,7 @@ echo -e "\${CYAN}====================================================\${NC}"
 
 DB_PATH="$HOME/.9router/db/data.sqlite"
 if [ -f "$DB_PATH" ]; then
-  sqlite3 "$DB_PATH" "UPDATE proxyPools SET config = json_set(config, '$.proxyUrl', '${origin}') WHERE type = 'cloudflare' OR json_extract(config, '$.name') = 'cloudflare-relay';"
+  sqlite3 "$DB_PATH" "UPDATE proxyPools SET data = json_set(data, '$.proxyUrl', '${origin}') WHERE type = 'cloudflare' OR json_extract(data, '$.name') = 'cloudflare-relay';"
   echo -e "\${GREEN}✔ آدرس رله با موفقیت در 9Router ذخیره شد: ${origin}\${NC}"
   launchctl kickstart -k "gui/$(id -u)/com.ardalan.9router" 2>/dev/null || true
   echo -e "\${GREEN}🎉 سرویس 9Router بازنشانی شد. بدون نیاز به فیلترشکن آماده است!\${NC}"

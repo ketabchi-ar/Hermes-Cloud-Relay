@@ -46,8 +46,8 @@ echo -e "${CYAN}1️⃣ در حال به‌روزرسانی تنظیمات Proxy
 # Update SQLite directly
 sqlite3 "$DB_PATH" <<EOF
 UPDATE proxyPools 
-SET config = json_set(config, '$.proxyUrl', '$RELAY_URL') 
-WHERE type = 'cloudflare' OR json_extract(config, '$.name') = 'cloudflare-relay';
+SET data = json_set(data, '$.proxyUrl', '$RELAY_URL') 
+WHERE type = 'cloudflare' OR json_extract(data, '$.name') = 'cloudflare-relay';
 EOF
 
 echo -e "${GREEN}✔ آدرس پروکسی در پایگاه‌داده با موفقیت ثبت شد.${NC}"
