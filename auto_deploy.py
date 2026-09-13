@@ -214,10 +214,11 @@ def main():
     # Enable workers.dev subdomain route as fallback
     subdomain_res = cf_request(f"/accounts/{account_id}/workers/scripts/{script_name}/subdomain", token, email, method="POST", data={"enabled": True})
 
-    # 5. Attach Custom Domain if available
+    # 5. Attach Custom Domain or Zone Route if available
     final_url = None
     if zone_id and target_subdomain:
-        print(f"\n\033[0;34m4️⃣ در حال اتصال ساب‌دامنه بدون فیلتر ({target_subdomain}) به ورکر...\033[0m")
+        print(f"\n\033[0;34m4️⃣ در حال اتصال ساب‌دامنه ({target_subdomain}) به ورکر...\033[0m")
+        # Attempt 1: Worker Custom Domain
         attach_res = cf_request(
             f"/accounts/{account_id}/workers/domains",
             token,
@@ -234,7 +235,38 @@ def main():
             final_url = f"https://{target_subdomain}"
             print(f"\033[0;32m✔ ساب‌دامنه اختصاصی با موفقیت متصل شد: {final_url}\033[0m")
         else:
-            print(f"\033[1;33m⚠️ نتوانست ساب‌دامنه را اتوماتیک اضافه کند ({attach_res.get('errors')}).\033[0m")
+            # Attempt 2: Zone Route + DNS Record (Supports .ir and restricted TLDs)
+            print(f"\033[0;34m🔄 در حال اتصال از طریق Worker Route و DNS برای دامنه...\033[0m")
+            # 1. Create DNS Dummy Record (192.0.2.1 proxied) so Cloudflare routes traffic
+            dns_res = cf_request(
+                f"/zones/{zone_id}/dns_records",
+                token,
+                email,
+                method="POST",
+                data={
+                    "type": "A",
+                    "name": target_subdomain.split(".")[0],
+                    "content": "192.0.2.1",
+                    "ttl": 1,
+                    "proxied": True
+                }
+            )
+            # 2. Add Route to Worker
+            route_res = cf_request(
+                f"/zones/{zone_id}/workers/routes",
+                token,
+                email,
+                method="POST",
+                data={
+                    "pattern": f"{target_subdomain}/*",
+                    "script": script_name
+                }
+            )
+            if route_res.get("success") or (route_res.get("errors") and "already exists" in str(route_res)):
+                final_url = f"https://{target_subdomain}"
+                print(f"\033[0;32m✔ ساب‌دامنه با موفقیت از طریق Worker Route متصل شد: {final_url}\033[0m")
+            else:
+                print(f"\033[1;33m⚠️ خطا در اتصال Route: {route_res.get('errors')}\033[0m")
 
     if not final_url:
         sub_info = cf_request(f"/accounts/{account_id}/workers/subdomain", token, email)
