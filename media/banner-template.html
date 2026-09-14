@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Vazirmatn', sans-serif; }
+    [dir="ltr"] { direction: ltr; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white w-[1280px] h-[720px] overflow-hidden relative flex flex-col justify-between p-14">
+  <!-- Glowing Background Orbs -->
+  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] bg-amber-500/20 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute -bottom-32 -left-32 w-[550px] h-[550px] bg-orange-600/20 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none"></div>
+
+  <!-- Header Top Bar -->
+  <div class="relative z-10 flex items-center justify-between border-b border-slate-800/80 pb-5">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-2xl font-black text-slate-950 shadow-lg shadow-orange-500/30">⚡</div>
+      <div>
+        <h2 class="text-xl font-black text-white tracking-tight">Hermes Cloud Relay</h2>
+        <p class="text-xs text-slate-400 font-mono">Serverless AI Gateway & Proxy</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <span class="bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">
+        ⚡ اتصال مستقیم به 9Router
+      </span>
+      <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">
+        ● ۱۰۰٪ رایگان و سرورلس
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Split Content -->
+  <div class="relative z-10 grid grid-cols-12 gap-8 my-auto items-center">
+    
+    <!-- Left / Text Column (7 cols) -->
+    <div class="col-span-7 space-y-4">
+      <div class="inline-block px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 font-bold text-xs">
+        🛡️ حل قطعی مشکل تحریم گوگل، جمینای و آنتی‌گراویتی
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black text-white leading-tight">
+        اتصال به هوش مصنوعی <br>
+        <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">بدون نیاز به فیلترشکن!</span>
+      </h1>
+      <p class="text-slate-400 text-sm leading-relaxed max-w-xl">
+        ترافیک هوش مصنوعی تحریمی از رله ابری کلودفلر رد میشه و هم‌زمان تمام سایت‌های ایرانی، درگاه‌های پرداخت و بانک‌ها با حداکثر سرعت اینترنت ایران باز می‌مونن.
+      </p>
+
+      <div class="flex items-center gap-4 pt-2">
+        <div class="flex items-center gap-2 text-xs text-slate-300 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+          <span>🍏</span> macOS
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-300 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+          <span>🐧</span> Linux (Ubuntu)
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-300 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+          <span>🪟</span> Windows PowerShell
+        </div>
+      </div>
+    </div>
+
+    <!-- Right / Code Card Column (5 cols) -->
+    <div class="col-span-5 space-y-3">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+          </div>
+          <span class="text-[11px] text-slate-500 font-mono">1-Click Auto Setup</span>
+        </div>
+        <div dir="ltr" class="space-y-1.5 font-mono text-xs">
+          <p class="text-slate-500"># macOS & Linux:</p>
+          <p class="text-amber-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 text-[11px] select-all">
+            curl -fsSL https://.../install.sh | bash
+          </p>
+          <p class="text-emerald-400 text-[11px] pt-1">
+            ✔ 9Router Proxy Pool Auto-Configured!
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-3.5 flex items-center justify-between text-xs">
+        <span class="text-slate-400">مخزن متن‌باز در گیت‌هاب:</span>
+        <span dir="ltr" class="text-amber-400 font-mono font-bold">ketabchi-ar/Hermes-Cloud-Relay</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="relative z-10 flex items-center justify-between border-t border-slate-800/80 pt-4 text-xs text-slate-500">
+    <div class="flex items-center gap-2">
+      <span class="text-slate-400">توسعه یافته توسط:</span>
+      <span class="text-white font-bold">Ardalan Ketabchi</span>
+      <span>•</span>
+      <span>لایسنس MIT</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-amber-400 font-mono">⭐ Star on GitHub</span>
+      <span>•</span>
+      <span class="text-emerald-400">DevSponsors Verified</span>
+    </div>
+  </div>
+</body>
+</html>

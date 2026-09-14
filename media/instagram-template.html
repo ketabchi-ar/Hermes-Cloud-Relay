@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Vazirmatn', sans-serif; }
+    [dir="ltr"] { direction: ltr; font-family: ui-monospace, Menlo, monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white w-[1080px] h-[1350px] overflow-hidden relative flex flex-col justify-between p-16">
+  <!-- Glowing Background Orbs -->
+  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] bg-amber-500/20 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute -bottom-32 -left-32 w-[550px] h-[550px] bg-orange-600/20 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-600/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+  <!-- Top Header -->
+  <div class="relative z-10 space-y-6">
+    <div class="flex items-center justify-between border-b border-slate-800/80 pb-6">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-3xl font-black text-slate-950 shadow-lg shadow-orange-500/30">⚡</div>
+        <div>
+          <h2 class="text-2xl font-black text-white tracking-tight">Hermes Cloud Relay</h2>
+          <p class="text-sm text-slate-400 font-mono">Open Source AI Infrastructure</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full text-emerald-400 font-bold text-sm">
+        <span>●</span> بدون نیاز به فیلترشکن
+      </div>
+    </div>
+
+    <div class="space-y-4 pt-4">
+      <div class="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-base">
+        🔥 راهکار قطعی تحریم هوش مصنوعی در ایران
+      </div>
+      <h1 class="text-5xl font-black leading-[1.3] text-white">
+        استفاده از <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">Gemini & Antigravity</span><br>
+        با اینترنت مستقیم ایران!
+      </h1>
+      <p class="text-slate-400 text-lg leading-relaxed max-w-2xl">
+        دیگه نیازی نیست برای اتصال به هوش مصنوعی کل اینترنت سیستمت رو ببری پشت فیلترشکن و سایت‌های ایرانی و بانکی مختل بشن.
+      </p>
+    </div>
+  </div>
+
+  <!-- Center Feature Cards -->
+  <div class="relative z-10 grid grid-cols-1 gap-5 my-auto">
+    
+    <div class="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-6 flex items-center gap-6 shadow-xl backdrop-blur-md">
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-3xl shrink-0">☁️</div>
+      <div class="space-y-1">
+        <h3 class="text-xl font-black text-white">۱۰۰٪ سرورلس روی کلودفلر (کاملاً رایگان)</h3>
+        <p class="text-slate-400 text-sm">اجرا روی لبه‌های جهانی Cloudflare با پشتیبانی از روزانه ۱۰۰,۰۰۰ درخواست رایگان بدون خرید هیچ سروری.</p>
+      </div>
+    </div>
+
+    <div class="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-6 flex items-center gap-6 shadow-xl backdrop-blur-md">
+      <div class="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-3xl shrink-0">🔀</div>
+      <div class="space-y-1">
+        <h3 class="text-xl font-black text-white">تفکیک هوشمند ترافیک داخلی و خارجی</h3>
+        <p class="text-slate-400 text-sm">سایت‌های ایرانی با حداکثر سرعت مستقیم باز می‌شوند؛ فقط درخواست‌های تحریمی مدل‌ها از رله ابری رد می‌شوند.</p>
+      </div>
+    </div>
+
+    <div class="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-6 flex items-center gap-6 shadow-xl backdrop-blur-md">
+      <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-3xl shrink-0">⚡</div>
+      <div class="space-y-1">
+        <h3 class="text-xl font-black text-white">سازگار کامل با ۹روتر و هرمس</h3>
+        <p class="text-slate-400 text-sm">پشتیبانی از پروتکل رسمی x-relay-target با سرعت فوق‌العاده بالا و استریم بدون وقفه.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom CTA Box -->
+  <div class="relative z-10 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-2xl">
+    <div class="space-y-1">
+      <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">نصب و راه‌اندازی ۱-کلیکی</p>
+      <p class="text-xl font-black text-white">گیت‌هاب: <span dir="ltr" class="text-amber-400 font-mono">ketabchi-ar/Hermes-Cloud-Relay</span></p>
+    </div>
+    <div class="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-base shadow-lg shadow-orange-500/20 flex items-center gap-2">
+      <span>⭐</span> لینک در بیو / گیت‌هاب
+    </div>
+  </div>
+</body>
+</html>
