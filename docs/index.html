@@ -83,6 +83,11 @@
       renderCliCommand();
     }
 
+    function sanitizeSubdomain(inputEl) {
+      inputEl.value = inputEl.value.toLowerCase().replace(/[^a-z0-9.-]/g, '');
+      renderCliCommand();
+    }
+
     function renderCliCommand() {
       var token = '';
       var email = '';
@@ -401,7 +406,7 @@
           </div>
           <div>
             <label class="text-[11px] text-slate-400 block mb-1">ساب‌دامنه اختصاصی شما (اختیاری - برای دسترسی بدون فیلترشکن در ایران):</label>
-            <input type="text" id="customSubdomain" oninput="sanitizeWorkerName(this, 'nameErr')" dir="ltr" placeholder="مثال: ai.yourdomain.com (خالی بگذارید تا از پیش‌فرض استفاده شود)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none font-mono">
+            <input type="text" id="customSubdomain" oninput="sanitizeSubdomain(this)" dir="ltr" placeholder="مثال: ai.yourdomain.com (خالی بگذارید تا از پیش‌فرض استفاده شود)" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl px-4 py-2 text-xs text-slate-100 transition outline-none font-mono">
             <p class="text-[10px] text-slate-500 mt-1">با کلید گلوبال، رکوردهای DNS و Route به صورت ۱۰۰٪ خودکار توسط اسکریپت ساخته خواهند شد.</p>
           </div>
         </div>
