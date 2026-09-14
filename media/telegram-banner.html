@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 1200px;
+      height: 800px;
+      background-color: #030712;
+      font-family: 'Vazirmatn', -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    [dir="ltr"] { direction: ltr; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body class="flex items-center justify-center relative">
+  <!-- Ambient background glow -->
+  <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-amber-500/15 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-orange-600/15 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <!-- Safe Container (1040px centered inside 1200px) -->
+  <div class="w-[1040px] h-[700px] flex flex-col justify-between relative z-10">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-slate-800/90 pb-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-2xl font-black text-slate-950 shadow-lg shadow-orange-500/25">⚡</div>
+        <div>
+          <h2 class="text-xl font-black text-white tracking-tight">Hermes Cloud Relay</h2>
+          <p class="text-[11px] text-slate-400 font-mono">Serverless AI Gateway for Iran</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1 rounded-full">
+          ⚡ هماهنگ با پروتکل 9Router
+        </span>
+        <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">
+          ● ۱۰۰٪ رایگان و سرورلس
+        </span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-12 gap-8 items-center my-auto">
+      
+      <!-- Right: Main Headline & Text (7 cols) -->
+      <div class="col-span-7 space-y-3.5">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 font-bold text-xs">
+          <span>🛡️</span> حل قطعی تحریم گوگل، جمینای و آنتی‌گراویتی
+        </div>
+
+        <h1 class="text-4xl font-black text-white leading-tight">
+          اتصال به هوش مصنوعی<br>
+          <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">بدون نیاز به فیلترشکن!</span>
+        </h1>
+
+        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-md">
+          ترافیک هوش مصنوعی بدون VPN از رله ابری کلودفلر رد میشه و سایت‌های ایرانی، درگاه‌های بانکی و اداری با سرعت مستقیم باز می‌مونن.
+        </p>
+
+        <div class="flex items-center gap-2.5 pt-1">
+          <div class="flex items-center gap-1 text-xs text-slate-300 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+            <span>🍏</span> macOS
+          </div>
+          <div class="flex items-center gap-1 text-xs text-slate-300 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+            <span>🐧</span> Linux (Ubuntu)
+          </div>
+          <div class="flex items-center gap-1 text-xs text-slate-300 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+            <span>🪟</span> Windows PowerShell
+          </div>
+        </div>
+      </div>
+
+      <!-- Left: Terminal Setup Card (5 cols) -->
+      <div class="col-span-5 space-y-2.5">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-2.5">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-mono">1-Click Auto Setup</span>
+          </div>
+          <div dir="ltr" class="space-y-1.5 font-mono text-xs">
+            <p class="text-slate-500 text-[10px]"># macOS & Linux:</p>
+            <div class="text-amber-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-[11px] break-all select-all">
+              curl -fsSL https://.../install.sh | bash
+            </div>
+            <p class="text-emerald-400 text-[10px] font-bold">
+              ✔ 9Router Proxy Pool Auto-Configured!
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/70 border border-slate-800/80 rounded-xl p-2.5 flex items-center justify-between text-xs">
+          <span class="text-slate-400">مخزن در گیت‌هاب:</span>
+          <span dir="ltr" class="text-amber-400 font-mono font-bold text-[11px]">ketabchi-ar/Hermes-Cloud-Relay</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between border-t border-slate-800/90 pt-3 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span>توسعه‌دهنده:</span>
+        <span class="text-white font-bold">Ardalan Ketabchi</span>
+        <span>•</span>
+        <span>لایسنس MIT</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-amber-400 font-mono">⭐ Star on GitHub</span>
+        <span>•</span>
+        <span class="text-emerald-400">DevSponsors Verified</span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
